@@ -1,0 +1,24 @@
+[gd_scene load_steps=6 format=3 uid="uid://becd3hunpae8u"]
+
+[ext_resource type="Texture2D" uid="uid://dutvhi0o35fg2" path="res://assets/sample-card.png" id="1_d81rb"]
+[ext_resource type="Script" uid="uid://dryot2h5jms5n" path="res://scripts/Card.cs" id="2_6u4wf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6u4wf"]
+albedo_texture = ExtResource("1_d81rb")
+
+[sub_resource type="QuadMesh" id="QuadMesh_ktuci"]
+material = SubResource("StandardMaterial3D_6u4wf")
+size = Vector2(0.5, 0.75)
+orientation = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d81rb"]
+size = Vector3(1, 1.5, 0.01)
+
+[node name="Card" type="MeshInstance3D"]
+mesh = SubResource("QuadMesh_ktuci")
+script = ExtResource("2_6u4wf")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_d81rb")

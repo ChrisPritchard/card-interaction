@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3 uid="uid://cp644q1sxu623"]
+
+[ext_resource type="Script" uid="uid://cr77o0ruskefb" path="res://scripts/MainScene.cs" id="1_w2twt"]
+[ext_resource type="PackedScene" uid="uid://becd3hunpae8u" path="res://scenes/card.tscn" id="2_7ykc4"]
+[ext_resource type="Texture2D" uid="uid://jc3ir0oq5et4" path="res://assets/felt_green.jpg" id="2_pw63i"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7ykc4"]
+albedo_texture = ExtResource("2_pw63i")
+uv1_scale = Vector3(2, 2, 2)
+
+[sub_resource type="QuadMesh" id="QuadMesh_w2twt"]
+material = SubResource("StandardMaterial3D_7ykc4")
+size = Vector2(5, 5)
+center_offset = Vector3(0, -0.01, 0)
+orientation = 1
+
+[sub_resource type="Environment" id="Environment_7ykc4"]
+background_mode = 1
+
+[node name="MainScene" type="Node3D" node_paths=PackedStringArray("Table")]
+script = ExtResource("1_w2twt")
+CardScene = ExtResource("2_7ykc4")
+Table = NodePath("Table")
+
+[node name="Table" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
+mesh = SubResource("QuadMesh_w2twt")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.365153, 0.930948, 0, -0.930948, 0.365153, 0, 1.51523, 0.548092)
+environment = SubResource("Environment_7ykc4")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.263671, 0.964613, 0, -0.964613, 0.263671, 0, 1.788, 0)
+shadow_enabled = true
+sky_mode = 1
