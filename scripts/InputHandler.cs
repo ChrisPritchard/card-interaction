@@ -8,6 +8,8 @@ public partial class InputHandler : Node3D
     private Vector3 drag_offset;
     private Vector3 drag_start;
 
+    [Export] public float drag_height = 0.05f;
+
     public override void _Input(InputEvent @event)
     {
         if (@event is InputEventMouseMotion move && dragged_card != null)
@@ -31,7 +33,7 @@ public partial class InputHandler : Node3D
 
         dragged_card = card;
         drag_start = card.GlobalPosition;
-        drag_offset = card.GlobalPosition - position;
+        drag_offset = card.GlobalPosition - position + new Vector3(0, drag_height, 0);
         card.Lift();
         card.SetCollisionLayer(3);
     }
@@ -60,9 +62,9 @@ public partial class InputHandler : Node3D
         var (_, card) = result.Value;
 
         if (card != null)
-            dragged_card.GlobalPosition = card.GlobalPosition + new Vector3(0, 0.05f, 0);
-        else
-            dragged_card.GlobalPosition = drag_start;
+            dragged_card.GlobalPosition = card.GlobalPosition + new Vector3(0, 0.01f, 0.05f);
+        // else
+        //     dragged_card.GlobalPosition = drag_start;
 
         dragged_card.Drop();
         dragged_card.SetCollisionLayer(1);
