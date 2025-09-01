@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://cp644q1sxu623"]
+[gd_scene load_steps=9 format=3 uid="uid://cp644q1sxu623"]
 
 [ext_resource type="Script" uid="uid://cr77o0ruskefb" path="res://scripts/MainScene.cs" id="1_w2twt"]
 [ext_resource type="PackedScene" uid="uid://becd3hunpae8u" path="res://scenes/card.tscn" id="2_7ykc4"]
 [ext_resource type="Texture2D" uid="uid://jc3ir0oq5et4" path="res://assets/felt_green.jpg" id="2_pw63i"]
+[ext_resource type="Script" uid="uid://dxeg5j5xonxfb" path="res://scripts/InputHandler.cs" id="4_pu3yx"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7ykc4"]
 albedo_texture = ExtResource("2_pw63i")
@@ -13,6 +14,8 @@ material = SubResource("StandardMaterial3D_7ykc4")
 size = Vector2(5, 5)
 center_offset = Vector3(0, -0.01, 0)
 orientation = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pu3yx"]
 
 [sub_resource type="Environment" id="Environment_7ykc4"]
 background_mode = 1
@@ -26,9 +29,19 @@ Table = NodePath("Table")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
 mesh = SubResource("QuadMesh_w2twt")
 
+[node name="StaticBody3D" type="StaticBody3D" parent="Table"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Table/StaticBody3D"]
+transform = Transform3D(5, 0, 0, 0, 0.01, 0, 0, 0, 5, 0, 0, 0)
+shape = SubResource("BoxShape3D_pu3yx")
+
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.365153, 0.930948, 0, -0.930948, 0.365153, 0, 1.51523, 0.548092)
 environment = SubResource("Environment_7ykc4")
+
+[node name="InputHandling" type="Node3D" parent="Camera3D" node_paths=PackedStringArray("Camera")]
+script = ExtResource("4_pu3yx")
+Camera = NodePath("..")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.263671, 0.964613, 0, -0.964613, 0.263671, 0, 1.788, 0)
