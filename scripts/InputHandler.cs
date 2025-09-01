@@ -30,6 +30,8 @@ public partial class InputHandler : Node3D
         if (result == null)
             return;
         var (position, card) = result.Value;
+        if (card == null)
+            return;
 
         dragged_card = card;
         drag_start = card.GlobalPosition;

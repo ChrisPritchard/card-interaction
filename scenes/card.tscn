@@ -5,17 +5,18 @@
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6u4wf"]
 albedo_texture = ExtResource("1_d81rb")
+uv1_scale = Vector3(-3, -2, 0)
+uv1_offset = Vector3(1, 0, 0)
 
-[sub_resource type="QuadMesh" id="QuadMesh_ktuci"]
+[sub_resource type="BoxMesh" id="BoxMesh_ktuci"]
 material = SubResource("StandardMaterial3D_6u4wf")
-size = Vector2(0.5, 0.75)
-orientation = 1
+size = Vector3(0.5, 0.02, 0.75)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d81rb"]
 size = Vector3(0.5, 0.75, 0.01)
 
 [node name="Card" type="MeshInstance3D" node_paths=PackedStringArray("Body")]
-mesh = SubResource("QuadMesh_ktuci")
+mesh = SubResource("BoxMesh_ktuci")
 script = ExtResource("2_6u4wf")
 Body = NodePath("StaticBody3D")
 
