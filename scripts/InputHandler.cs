@@ -8,7 +8,7 @@ public partial class InputHandler : Node3D
     private Vector3 drag_offset;
     private Vector3 drag_start;
 
-    [Export] public float drag_height = 0.2f;
+    [Export] public float drag_height = 0.05f;
 
     public override void _Input(InputEvent @event)
     {

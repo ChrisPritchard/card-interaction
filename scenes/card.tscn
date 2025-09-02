@@ -1,15 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://becd3hunpae8u"]
+[gd_scene load_steps=5 format=3 uid="uid://becd3hunpae8u"]
 
-[ext_resource type="Texture2D" uid="uid://dje202rgj6y55" path="res://assets/larger-card.png" id="1_6u4wf"]
+[ext_resource type="Material" uid="uid://3tk04u78x66o" path="res://resources/card_face.tres" id="1_6u4wf"]
 [ext_resource type="Script" uid="uid://dryot2h5jms5n" path="res://scripts/Card.cs" id="2_6u4wf"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6u4wf"]
-transparency = 4
-no_depth_test = true
-albedo_texture = ExtResource("1_6u4wf")
-
 [sub_resource type="QuadMesh" id="QuadMesh_ktuci"]
-material = SubResource("StandardMaterial3D_6u4wf")
+material = ExtResource("1_6u4wf")
 size = Vector2(0.5, 0.75)
 orientation = 1
 

@@ -14,6 +14,7 @@ public partial class MainScene : Node3D
         for (var i = 0; i < 5; i++)
         {
             var new_card = CardScene.Instantiate<Card>();
+            new_card.Scale = new(0.5f, 0.5f, 0.5f);
             new_card.Position = new((-2.5f * cw) + i * cw + i * gap, 0, 0);
             AddChild(new_card);
         }
