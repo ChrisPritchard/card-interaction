@@ -38,6 +38,8 @@ shape = SubResource("BoxShape3D_pu3yx")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.365153, 0.930948, 0, -0.930948, 0.365153, 0, 1.51523, 0.548092)
 environment = SubResource("Environment_7ykc4")
+near = 0.003
+far = 6.59
 
 [node name="InputHandling" type="Node3D" parent="Camera3D" node_paths=PackedStringArray("Camera")]
 script = ExtResource("4_pu3yx")

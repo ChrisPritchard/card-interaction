@@ -4,7 +4,8 @@
 [ext_resource type="Script" uid="uid://dryot2h5jms5n" path="res://scripts/Card.cs" id="2_6u4wf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6u4wf"]
-transparency = 1
+transparency = 4
+no_depth_test = true
 albedo_texture = ExtResource("1_6u4wf")
 
 [sub_resource type="QuadMesh" id="QuadMesh_ktuci"]

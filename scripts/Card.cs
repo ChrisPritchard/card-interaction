@@ -7,7 +7,7 @@ public partial class Card : MeshInstance3D
     private Tween tweener;
 
     const float lift_speed = 0.1f;
-    const float lift_height = 0.05f;
+    const float lift_height = 0.2f;
 
     public void SetCollisionLayer(uint layer) => Body.CollisionLayer = (uint)(1 << (int)(layer - 1));
 
