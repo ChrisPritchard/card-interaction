@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://d3vd7hfyjtpj3"]
+
+[ext_resource type="Script" uid="uid://brb2kthb2xrku" path="res://scripts/TableScene.cs" id="1_biiil"]
+[ext_resource type="Texture2D" uid="uid://jc3ir0oq5et4" path="res://assets/felt_green.jpg" id="1_oomgj"]
+[ext_resource type="PackedScene" uid="uid://cebutgsbntedd" path="res://scenes/card.tscn" id="3_biiil"]
+
+[node name="TableScene" type="Node2D" node_paths=PackedStringArray("Table")]
+script = ExtResource("1_biiil")
+CardScene = ExtResource("3_biiil")
+Table = NodePath("Table")
+
+[node name="Table" type="Sprite2D" parent="."]
+scale = Vector2(1.5625, 1.44971)
+texture = ExtResource("1_oomgj")
+
+[node name="Camera2D" type="Camera2D" parent="."]
