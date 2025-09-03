@@ -8,7 +8,8 @@ public partial class InputHandler : Node3D
     private Vector3 drag_offset;
     private Vector3 drag_start;
 
-    [Export] public float drag_height = 0.05f;
+    const float height_adjust = 0.05f;
+    private float top_height = 0.05f;
 
     public override void _Input(InputEvent @event)
     {
@@ -23,7 +24,6 @@ public partial class InputHandler : Node3D
         }
     }
 
-
     private void TryStartDrag(Vector2 screenPos)
     {
         var result = Raycast(screenPos);
@@ -34,9 +34,11 @@ public partial class InputHandler : Node3D
             return;
 
         dragged_card = card;
+        card.GlobalPosition = new Vector3(card.GlobalPosition.X, top_height + height_adjust, card.GlobalPosition.Z);
+        top_height += height_adjust;
         drag_start = card.GlobalPosition;
-        drag_offset = card.GlobalPosition - position + new Vector3(0, drag_height, 0);
-        card.Lift();
+        drag_offset = card.GlobalPosition - position;// + new Vector3(0, drag_height, 0);
+        //card.RenderPriority = 1;
         card.SetCollisionLayer(3);
     }
 
@@ -57,20 +59,17 @@ public partial class InputHandler : Node3D
         if (dragged_card == null)
             return;
 
-        var result = Raycast(screenPos);
-        if (result == null)
-            return;
+        // var result = Raycast(screenPos);
+        // if (result == null)
+        //     return;
 
-        var (_, card) = result.Value;
+        // var (_, card) = result.Value;
 
-        if (card != null)
-            dragged_card.GlobalPosition = card.GlobalPosition + new Vector3(0, 0.01f, 0.05f);
-        // else
-        //     dragged_card.GlobalPosition = drag_start;
+        // if (card != null)
+        //     dragged_card.GlobalPosition = card.GlobalPosition + new Vector3(0, 0.02f, 0);
 
-        dragged_card.Drop();
+        //dragged_card.RenderPriority = 0;
         dragged_card.SetCollisionLayer(1);
-
         dragged_card = null;
     }
 
@@ -87,8 +86,14 @@ public partial class InputHandler : Node3D
             return null;
 
         if (result["collider"].As<StaticBody3D>()?.Owner is Card card)
+        {
+            GD.Print("card found");
             return ((Vector3)result["position"], card);
+        }
         else
+        {
+            GD.Print("no card");
             return ((Vector3)result["position"], null);
+        }
     }
 }

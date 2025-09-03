@@ -12,7 +12,7 @@ uv1_scale = Vector3(2, 2, 2)
 [sub_resource type="QuadMesh" id="QuadMesh_w2twt"]
 material = SubResource("StandardMaterial3D_7ykc4")
 size = Vector2(5, 5)
-center_offset = Vector3(0, -0.01, 0)
+center_offset = Vector3(0, -0.02, 0)
 orientation = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pu3yx"]
@@ -27,7 +27,6 @@ CardScene = ExtResource("2_7ykc4")
 Table = NodePath("Table")
 
 [node name="Table" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.01, 0)
 mesh = SubResource("QuadMesh_w2twt")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Table"]
