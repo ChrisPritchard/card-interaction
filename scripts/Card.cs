@@ -34,10 +34,10 @@ public partial class Card : Sprite2D
                 StartDrag(GetGlobalMousePosition());
             else
                 dragged = false;
-            return;
-        }
 
-        if (@event is InputEventScreenTouch touch)
+            GetViewport().SetInputAsHandled();
+        }
+        else if (@event is InputEventScreenTouch touch)
         {
             if (touch.Pressed && touch.Index != -1)
             {
@@ -49,13 +49,15 @@ public partial class Card : Sprite2D
                 touchIndex = -1;
                 dragged = false;
             }
-            return;
+
+            GetViewport().SetInputAsHandled();
         }
 
         if (dragged && @event is InputEventScreenDrag drag && drag.Index == touchIndex)
         {
             Position = drag.Position + offset;
-            return;
+
+            GetViewport().SetInputAsHandled();
         }
 
         if (@event is InputEventMouseMotion move)
@@ -80,6 +82,8 @@ public partial class Card : Sprite2D
                     .SetTrans(Tween.TransitionType.Sine);
                 mouse_over = false;
             }
+
+            GetViewport().SetInputAsHandled();
         }
     }
 

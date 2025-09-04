@@ -1,21 +1,22 @@
 shader_type canvas_item;
 
-uniform vec4 border_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
-uniform float border_width : hint_range(0, 0.2) = 0.1;
-uniform float fade_amount : hint_range(0, 1) = 0.0;
+uniform vec4 line_color : source_color = vec4(1.0);
+uniform float line_thickness : hint_range(0, 10) = 1.0;
+
+const vec2 OFFSETS[8] = {
+	vec2(-1, -1), vec2(-1, 0), vec2(-1, 1), vec2(0, -1), vec2(0, 1), 
+	vec2(1, -1), vec2(1, 0), vec2(1, 1)
+};
 
 void fragment() {
-    vec4 tex_color = texture(TEXTURE, UV);
-    float alpha = tex_color.a;
-    
-    // Calculate distance from edge
-    vec2 uv_offset = abs(UV - 0.5) * 2.0;
-    float dist = max(uv_offset.x, uv_offset.y);
-    
-    // Create border effect
-    if (dist > 1.0 - border_width && alpha > 0.0) {
-        COLOR = mix(tex_color, border_color, fade_amount);
-    } else {
-        COLOR = tex_color;
-    }
+	vec2 size = TEXTURE_PIXEL_SIZE * line_thickness;
+	float outline = 0.0;
+	
+	for (int i = 0; i < OFFSETS.length(); i++) {
+		outline += texture(TEXTURE, UV + size * OFFSETS[i]).a;
+	}
+	outline = min(outline, 1.0);
+	
+	vec4 color = texture(TEXTURE, UV);
+	COLOR = mix(color, line_color, outline - color.a);
 }
