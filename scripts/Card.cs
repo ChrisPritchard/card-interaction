@@ -19,18 +19,27 @@ public partial class Card : Sprite2D
         {
             Shader = BorderShader
         };
+        shaderMaterial.SetShaderParameter("fade_amount", 0f);
         Material = shaderMaterial;
     }
 
     public override void _Input(InputEvent @event)
     {
-        if (@event is InputEventMouseButton mouse && mouse.ButtonIndex == MouseButton.Left)
+        var rect = new Rect2(GlobalPosition, Texture.GetSize() * Scale);
+        var position = (@event as InputEventMouse)?.Position ?? (@event as InputEventScreenDrag)?.Position ?? (@event as InputEventScreenTouch)?.Position;
+        if (position == null || !rect.HasPoint(position.Value))
         {
-            var rect = new Rect2(GlobalPosition, Texture.GetSize() * Scale);
-            if (!rect.HasPoint(mouse.Position))
-                return;
+            if (mouse_over)
+            {
+                mouse_over = false;
+                FadeOut();
+            }
+            return;
+        }
 
-            if (mouse.Pressed)
+        if (@event is InputEventMouseButton mouse)
+        {
+            if (!dragged && mouse.ButtonIndex == MouseButton.Left && mouse.Pressed)
                 StartDrag(GetGlobalMousePosition());
             else
                 dragged = false;
@@ -56,36 +65,25 @@ public partial class Card : Sprite2D
         if (dragged && @event is InputEventScreenDrag drag && drag.Index == touchIndex)
         {
             Position = drag.Position + offset;
-
             GetViewport().SetInputAsHandled();
         }
-
-        if (@event is InputEventMouseMotion move)
+        else if (!mouse_over)
         {
-            var mousePos = GetGlobalMousePosition();
-            var rect = new Rect2(GlobalPosition, Texture.GetSize() * Scale);
-
-            var nowOver = rect.HasPoint(mousePos);
-            if (nowOver && !mouse_over)
-            {
-                CreateTween()
-                    .TweenMethod(Callable.From<float>(v => shaderMaterial.SetShaderParameter("fade_amount", v)), 0.0f, 1.0f, 0.3f)
-                    .SetEase(Tween.EaseType.Out)
-                    .SetTrans(Tween.TransitionType.Sine);
-                mouse_over = true;
-            }
-            else if (!nowOver && mouse_over)
-            {
-                CreateTween()
-                    .TweenMethod(Callable.From<float>(v => shaderMaterial.SetShaderParameter("fade_amount", v)), 1.0f, 0.0f, 0.3f)
-                    .SetEase(Tween.EaseType.Out)
-                    .SetTrans(Tween.TransitionType.Sine);
-                mouse_over = false;
-            }
-
+            mouse_over = true;
+            FadeIn();
             GetViewport().SetInputAsHandled();
         }
     }
+
+    private void FadeIn() => CreateTween()
+                .TweenMethod(Callable.From<float>(v => shaderMaterial.SetShaderParameter("fade_amount", v)), 0.0f, 1.0f, 0.3f)
+                .SetEase(Tween.EaseType.Out)
+                .SetTrans(Tween.TransitionType.Sine);
+
+    private void FadeOut() => CreateTween()
+                .TweenMethod(Callable.From<float>(v => shaderMaterial.SetShaderParameter("fade_amount", v)), 1.0f, 0.0f, 0.3f)
+                .SetEase(Tween.EaseType.Out)
+                .SetTrans(Tween.TransitionType.Sine);
 
     private void StartDrag(Vector2 start)
     {

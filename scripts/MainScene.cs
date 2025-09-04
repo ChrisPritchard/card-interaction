@@ -17,14 +17,10 @@ public partial class MainScene : Node3D
         var table_pos = GetTablePosition(@event);
         if (table_pos != null)
         {
-            if (@event is InputEventMouseButton mouse && mouse.Pressed)
-            {
-                GD.Print("pressed at " + table_pos);
-            }
             var transformedEvent = @event.Duplicate() as InputEvent;
             ApplyPositionToEvent(transformedEvent, table_pos.Value);
             TableViewPort.PushInput(transformedEvent, true);
-            //GetViewport().SetInputAsHandled();
+            GetViewport().SetInputAsHandled();
         }
     }
 
