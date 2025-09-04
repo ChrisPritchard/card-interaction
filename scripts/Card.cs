@@ -3,10 +3,24 @@ using Godot;
 
 public partial class Card : Sprite2D
 {
+    [Export] public Shader BorderShader { get; set; }
     public Table Table { private get; set; }
+
+    private ShaderMaterial shaderMaterial;
+    private bool mouse_over = false;
+
     private bool dragged;
     private Vector2 offset;
     private int touchIndex = -1;
+
+    public override void _Ready()
+    {
+        shaderMaterial = new ShaderMaterial
+        {
+            Shader = BorderShader
+        };
+        Material = shaderMaterial;
+    }
 
     public override void _Input(InputEvent @event)
     {
@@ -20,8 +34,10 @@ public partial class Card : Sprite2D
                 StartDrag(GetGlobalMousePosition());
             else
                 dragged = false;
+            return;
         }
-        else if (@event is InputEventScreenTouch touch)
+
+        if (@event is InputEventScreenTouch touch)
         {
             if (touch.Pressed && touch.Index != -1)
             {
@@ -33,9 +49,38 @@ public partial class Card : Sprite2D
                 touchIndex = -1;
                 dragged = false;
             }
+            return;
         }
-        else if (dragged && @event is InputEventScreenDrag drag && drag.Index == touchIndex)
+
+        if (dragged && @event is InputEventScreenDrag drag && drag.Index == touchIndex)
+        {
             Position = drag.Position + offset;
+            return;
+        }
+
+        if (@event is InputEventMouseMotion move)
+        {
+            var mousePos = GetGlobalMousePosition();
+            var rect = new Rect2(GlobalPosition, Texture.GetSize() * Scale);
+
+            var nowOver = rect.HasPoint(mousePos);
+            if (nowOver && !mouse_over)
+            {
+                CreateTween()
+                    .TweenMethod(Callable.From<float>(v => shaderMaterial.SetShaderParameter("fade_amount", v)), 0.0f, 1.0f, 0.3f)
+                    .SetEase(Tween.EaseType.Out)
+                    .SetTrans(Tween.TransitionType.Sine);
+                mouse_over = true;
+            }
+            else if (!nowOver && mouse_over)
+            {
+                CreateTween()
+                    .TweenMethod(Callable.From<float>(v => shaderMaterial.SetShaderParameter("fade_amount", v)), 1.0f, 0.0f, 0.3f)
+                    .SetEase(Tween.EaseType.Out)
+                    .SetTrans(Tween.TransitionType.Sine);
+                mouse_over = false;
+            }
+        }
     }
 
     private void StartDrag(Vector2 start)
