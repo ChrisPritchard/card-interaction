@@ -1,0 +1,59 @@
+[gd_scene load_steps=9 format=3 uid="uid://bpemdtx3gtqkq"]
+
+[ext_resource type="Shader" uid="uid://qiu30iajtd3v" path="res://resources/depth_override.gdshader" id="1_v2nq8"]
+[ext_resource type="Texture2D" uid="uid://dje202rgj6y55" path="res://assets/larger-card.png" id="2_shfoo"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_shfoo"]
+render_priority = 0
+shader = ExtResource("1_v2nq8")
+shader_parameter/albedo_texture = ExtResource("2_shfoo")
+shader_parameter/albedo_color = Color(1, 1, 1, 1)
+shader_parameter/depth_setting = 0.3
+
+[sub_resource type="QuadMesh" id="QuadMesh_djueu"]
+material = SubResource("ShaderMaterial_shfoo")
+size = Vector2(1, 1.5)
+orientation = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ctc5j"]
+render_priority = 0
+shader = ExtResource("1_v2nq8")
+shader_parameter/albedo_texture = ExtResource("2_shfoo")
+shader_parameter/albedo_color = Color(1, 1, 1, 1)
+shader_parameter/depth_setting = 0.2
+
+[sub_resource type="QuadMesh" id="QuadMesh_6evu7"]
+material = SubResource("ShaderMaterial_ctc5j")
+size = Vector2(1, 1.5)
+orientation = 1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u5pym"]
+render_priority = 0
+shader = ExtResource("1_v2nq8")
+shader_parameter/albedo_texture = ExtResource("2_shfoo")
+shader_parameter/albedo_color = Color(1, 1, 1, 1)
+shader_parameter/depth_setting = 0.1
+
+[sub_resource type="QuadMesh" id="QuadMesh_1rjtr"]
+material = SubResource("ShaderMaterial_u5pym")
+size = Vector2(1, 1.5)
+orientation = 1
+
+[node name="DepthTest" type="Node3D"]
+
+[node name="Card1" type="MeshInstance3D" parent="."]
+mesh = SubResource("QuadMesh_djueu")
+
+[node name="Card2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.540449, 0, 0)
+mesh = SubResource("QuadMesh_6evu7")
+
+[node name="Card3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.07543, 0, 0)
+mesh = SubResource("QuadMesh_1rjtr")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.603667, 0.797236, 0, -0.797236, 0.603667, 0, 2.89334, 1.48482)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.779086, 0.626917, 0, -0.626917, 0.779086, 0, 0, 0)
