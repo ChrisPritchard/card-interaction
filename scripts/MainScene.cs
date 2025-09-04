@@ -4,88 +4,37 @@ public partial class MainScene : Node3D
 {
     [Export] public Sprite3D TableSprite;
     [Export] public SubViewport TableViewPort;
+    [Export] public BoxShape3D TableCollisionMesh;
+    [Export] public TableScene Table;
     [Export] public Camera3D Camera;
 
     public override void _Input(InputEvent @event)
     {
-        if (IsEventOnTable(@event))
+        var table_pos = GetTablePosition(@event);
+        if (table_pos != null)
         {
-            var transformedEvent = TransformEventToViewport(@event);
-            TableViewPort.PushInput(transformedEvent);
+            if (@event is InputEventMouseButton mouse && mouse.Pressed)
+            {
+                GD.Print("pressed at " + table_pos);
+            }
+            var transformedEvent = @event.Duplicate() as InputEvent;
+            ApplyPositionToEvent(transformedEvent, table_pos.Value);
+            TableViewPort.PushInput(transformedEvent, true);
+            // Table._Input(transformedEvent);
             GetViewport().SetInputAsHandled();
         }
     }
 
-
-    private bool IsEventOnTable(InputEvent @event)
+    private Vector2? GetTablePosition(InputEvent @event)
     {
+        Vector2 screenPoint;
         if (@event is InputEventMouse)
-        {
-            if (@event is InputEventMouseButton btn && btn.Pressed)
-            {
-                GD.Print("pressed");
-            }
-            var mousePos = GetViewport().GetMousePosition();
-            return IsPointOnTable(mousePos);
-        }
-        else if (@event is InputEventScreenTouch touchEvent)
-            return IsPointOnTable(touchEvent.Position);
-
-        return false;
-    }
-
-    private bool IsPointOnTable(Vector2 screenPoint)
-    {
-        var from = Camera.ProjectRayOrigin(screenPoint);
-        var to = from + Camera.ProjectRayNormal(screenPoint) * 1000;
-
-        var space = GetWorld3D().DirectSpaceState;
-        var query = PhysicsRayQueryParameters3D.Create(from, to);
-        query.CollideWithAreas = true;
-        query.CollideWithBodies = false;
-        query.CollisionMask = 1;
-
-        var result = space.IntersectRay(query);
-
-        if (result.Count > 0 && result["collider"].As<Area3D>().GetParent() == TableSprite)
-            return true;
-
-        return false;
-    }
-
-    private InputEvent TransformEventToViewport(InputEvent @event)
-    {
-        var transformedEvent = @event.Duplicate() as InputEvent;
-        var screenPoint = Vector2.Zero;
-
-        if (transformedEvent is InputEventMouse)
-        {
             screenPoint = GetViewport().GetMousePosition();
-        }
-        else if (transformedEvent is InputEventScreenTouch touchEvent)
-        {
-            screenPoint = touchEvent.Position;
-        }
-        else if (transformedEvent is InputEventScreenDrag dragEvent)
-        {
-            screenPoint = dragEvent.Position;
-        }
+        else if (@event is InputEventScreenTouch touch)
+            screenPoint = touch.Position;
+        else
+            return null;
 
-        var uv = GetSprite3DUV(screenPoint);
-        if (uv == Vector2.Zero)
-            return transformedEvent;
-
-        var viewportPos = new Vector2(
-            uv.X * TableViewPort.Size.X,
-            uv.Y * TableViewPort.Size.Y
-        );
-
-        ApplyPositionToEvent(transformedEvent, viewportPos);
-        return transformedEvent;
-    }
-
-    private Vector2 GetSprite3DUV(Vector2 screenPoint)
-    {
         var from = Camera.ProjectRayOrigin(screenPoint);
         var to = from + Camera.ProjectRayNormal(screenPoint) * 1000;
 
@@ -96,21 +45,24 @@ public partial class MainScene : Node3D
         query.CollisionMask = 1;
 
         var result = space.IntersectRay(query);
+        if (result.Count == 0)
+            return null;
 
-        if (result.Count > 0 && result["collider"].As<Area3D>().GetParent() == TableSprite)
-        {
-            var localIntersection = TableSprite.ToLocal(result["position"].As<Vector3>());
+        var area3d = result["collider"].As<Area3D>();
+        if (area3d == null || area3d.GetParent() != TableSprite)
+            return null;
 
-            float u = localIntersection.X + 0.5f;
-            float v = localIntersection.Z + 0.5f;
+        var localIntersection = area3d.ToLocal(result["position"].As<Vector3>());
+        var mesh_size = TableCollisionMesh.Size;
+        var table_size = TableViewPort.Size;
 
-            return new Vector2(u, v);
-        }
+        var uv = new Vector2((localIntersection.X + mesh_size.X / 2) / mesh_size.X, (localIntersection.Z + mesh_size.Z / 2) / mesh_size.Z);
+        var table_pos = new Vector2(uv.X * table_size.X - table_size.X / 2, uv.Y * table_size.Y - table_size.Y / 2);
 
-        return Vector2.Zero;
+        return table_pos;
     }
 
-    private void ApplyPositionToEvent(InputEvent @event, Vector2 position)
+    private static void ApplyPositionToEvent(InputEvent @event, Vector2 position)
     {
         if (@event is InputEventMouse mouseEvent)
         {
@@ -134,5 +86,4 @@ public partial class MainScene : Node3D
             dragEvent.Position = position;
         }
     }
-
 }

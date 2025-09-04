@@ -12,6 +12,10 @@ public partial class Card : Sprite2D
     {
         if (@event is InputEventMouseButton mouse && mouse.ButtonIndex == MouseButton.Left)
         {
+            var rect = new Rect2(GlobalPosition, Texture.GetSize() * Scale);
+            if (!rect.HasPoint(mouse.Position))
+                return;
+
             if (mouse.Pressed)
                 StartDrag(GetGlobalMousePosition());
             else

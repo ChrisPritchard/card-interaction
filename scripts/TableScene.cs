@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -10,7 +9,7 @@ public partial class TableScene : Node2D
 
     private readonly Vector2 target_card_size = new(100, 150);
 
-    private List<Card> cards = [];
+    private readonly List<Card> cards = [];
 
     public override void _Ready()
     {
@@ -35,4 +34,10 @@ public partial class TableScene : Node2D
         var max_z = cards.Select(c => c.ZIndex).Max();
         card.ZIndex = max_z + 1;
     }
+
+    public override void _Input(InputEvent @event)
+    {
+        // will pass through
+    }
+
 }
