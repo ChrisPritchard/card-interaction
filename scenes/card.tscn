@@ -6,4 +6,5 @@
 [node name="Card" type="Sprite2D"]
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("1_d81rb")
+centered = false
 script = ExtResource("2_6u4wf")

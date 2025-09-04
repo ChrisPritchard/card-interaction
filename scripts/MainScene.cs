@@ -5,10 +5,14 @@ public partial class MainScene : Node3D
     [Export] public Sprite3D TableSprite;
     [Export] public SubViewport TableViewPort;
     [Export] public BoxShape3D TableCollisionMesh;
-    [Export] public TableScene Table;
     [Export] public Camera3D Camera;
 
-    public override void _Input(InputEvent @event)
+    public override void _Ready()
+    {
+        TableCollisionMesh.Size = new(TableSprite.PixelSize * TableViewPort.Size.X, 0.01f, TableSprite.PixelSize * TableViewPort.Size.Y);
+    }
+
+    public override void _UnhandledInput(InputEvent @event)
     {
         var table_pos = GetTablePosition(@event);
         if (table_pos != null)
@@ -20,8 +24,7 @@ public partial class MainScene : Node3D
             var transformedEvent = @event.Duplicate() as InputEvent;
             ApplyPositionToEvent(transformedEvent, table_pos.Value);
             TableViewPort.PushInput(transformedEvent, true);
-            // Table._Input(transformedEvent);
-            GetViewport().SetInputAsHandled();
+            //GetViewport().SetInputAsHandled();
         }
     }
 
@@ -52,12 +55,12 @@ public partial class MainScene : Node3D
         if (area3d == null || area3d.GetParent() != TableSprite)
             return null;
 
-        var localIntersection = area3d.ToLocal(result["position"].As<Vector3>());
+        var localIntersection = area3d.GlobalTransform.AffineInverse() * result["position"].As<Vector3>();
         var mesh_size = TableCollisionMesh.Size;
         var table_size = TableViewPort.Size;
 
         var uv = new Vector2((localIntersection.X + mesh_size.X / 2) / mesh_size.X, (localIntersection.Z + mesh_size.Z / 2) / mesh_size.Z);
-        var table_pos = new Vector2(uv.X * table_size.X - table_size.X / 2, uv.Y * table_size.Y - table_size.Y / 2);
+        var table_pos = new Vector2(uv.X * table_size.X, uv.Y * table_size.Y);
 
         return table_pos;
     }

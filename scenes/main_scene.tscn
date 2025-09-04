@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://cp644q1sxu623"]
+[gd_scene load_steps=10 format=3 uid="uid://cp644q1sxu623"]
 
 [ext_resource type="Script" uid="uid://cr77o0ruskefb" path="res://scripts/MainScene.cs" id="1_w2twt"]
 [ext_resource type="Shape3D" uid="uid://qbgvnh3m6de" path="res://resources/table_collision_mesh.tres" id="2_7ykc4"]
-[ext_resource type="PackedScene" uid="uid://d3vd7hfyjtpj3" path="res://scenes/table_scene.tscn" id="4_gubc5"]
+[ext_resource type="Texture2D" uid="uid://jc3ir0oq5et4" path="res://assets/felt_green.jpg" id="2_pw63i"]
+[ext_resource type="Script" uid="uid://dk0j5cd4pxuxk" path="res://scripts/Table.cs" id="4_pu3yx"]
+[ext_resource type="PackedScene" uid="uid://cebutgsbntedd" path="res://scenes/card.tscn" id="5_gubc5"]
 
 [sub_resource type="Environment" id="Environment_7ykc4"]
 background_mode = 1
@@ -10,12 +12,17 @@ background_mode = 1
 [sub_resource type="ViewportTexture" id="ViewportTexture_rt2n2"]
 viewport_path = NodePath("SubViewport")
 
-[node name="MainScene" type="Node3D" node_paths=PackedStringArray("TableSprite", "TableViewPort", "Table", "Camera")]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gubc5"]
+albedo_color = Color(0.639465, 0.000319588, 0.643939, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_rt2n2"]
+material = SubResource("StandardMaterial3D_gubc5")
+
+[node name="MainScene" type="Node3D" node_paths=PackedStringArray("TableSprite", "TableViewPort", "Camera")]
 script = ExtResource("1_w2twt")
 TableSprite = NodePath("Table")
 TableViewPort = NodePath("SubViewport")
 TableCollisionMesh = ExtResource("2_7ykc4")
-Table = NodePath("SubViewport/TableScene")
 Camera = NodePath("Camera3D")
 
 [node name="Camera3D" type="Camera3D" parent="."]
@@ -43,6 +50,22 @@ shape = ExtResource("2_7ykc4")
 [node name="SubViewport" type="SubViewport" parent="."]
 disable_3d = true
 physics_object_picking_sort = true
-size = Vector2i(3000, 3000)
+size = Vector2i(2048, 2048)
 
-[node name="TableScene" parent="SubViewport" instance=ExtResource("4_gubc5")]
+[node name="Table" type="Sprite2D" parent="SubViewport"]
+texture = ExtResource("2_pw63i")
+centered = false
+script = ExtResource("4_pu3yx")
+CardScene = ExtResource("5_gubc5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.907572, 0, -0.419896, 0.417139, -0.1144, 0.901614, -0.0480359, -0.993435, -0.103826, 4.83625, 0.834392, -0.005023)
+mesh = SubResource("PrismMesh_rt2n2")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.459843, 0, 0.888, 0, 1, 0, -0.888, 0, 0.459843, -3.5886, 0.834392, -5.72643)
+mesh = SubResource("PrismMesh_rt2n2")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.907572, 0, -0.419896, 0, 1, 0, 0.419896, 0, 0.907572, -3.5886, 0.834392, -0.005023)
+mesh = SubResource("PrismMesh_rt2n2")

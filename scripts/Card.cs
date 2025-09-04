@@ -3,7 +3,7 @@ using Godot;
 
 public partial class Card : Sprite2D
 {
-    public TableScene Table { private get; set; }
+    public Table Table { private get; set; }
     private bool dragged;
     private Vector2 offset;
     private int touchIndex = -1;
@@ -51,6 +51,4 @@ public partial class Card : Sprite2D
         if (dragged && touchIndex == -1) // only for mouse drag here
             Position = GetGlobalMousePosition() + offset;
     }
-
-
 }
