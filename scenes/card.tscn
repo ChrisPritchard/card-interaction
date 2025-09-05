@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://bc2womwx0o0n8"]
+
+[ext_resource type="Texture2D" uid="uid://vowec5qqqv2o" path="res://assets/larger-card-bordered.png" id="1_kg30u"]
+[ext_resource type="Script" uid="uid://pts2mfcn18rx" path="res://scripts/Card.cs" id="2_6u4wf"]
+[ext_resource type="Shape3D" uid="uid://k1it56oflaxu" path="res://resources/card_shape.tres" id="3_ktuci"]
+
+[node name="Card" type="Sprite3D" node_paths=PackedStringArray("CollisionArea")]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
+axis = 1
+double_sided = false
+texture = ExtResource("1_kg30u")
+script = ExtResource("2_6u4wf")
+CollisionArea = NodePath("Area3D")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = ExtResource("3_ktuci")
