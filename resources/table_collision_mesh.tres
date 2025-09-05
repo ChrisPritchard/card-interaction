@@ -1,5 +1,0 @@
-[gd_resource type="BoxShape3D" format=3 uid="uid://qbgvnh3m6de"]
-
-[resource]
-margin = 0.0
-size = Vector3(20, 0.2, 20)
