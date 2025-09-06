@@ -6,6 +6,8 @@ public partial class Card : MeshInstance3D
 {
     [Export] public Area3D CollisionArea;
 
+    [Export] public float BorderTransitionSpeed = 0.8f;
+
     private float depth;
     public float Depth
     {
@@ -31,7 +33,7 @@ public partial class Card : MeshInstance3D
         if (colour != null)
             Material.SetShaderParameter("line_color", colour.Value);
         CreateTween()
-            .TweenMethod(Callable.From<float>(v => Material.SetShaderParameter("fade_amount", v)), 0.0f, 1.0f, 0.3f)
+            .TweenMethod(Callable.From<float>(v => Material.SetShaderParameter("fade_amount", v)), 0.0f, 1.0f, BorderTransitionSpeed)
             .SetEase(Tween.EaseType.Out)
             .SetTrans(Tween.TransitionType.Sine);
     }
@@ -39,7 +41,7 @@ public partial class Card : MeshInstance3D
     public void HideBorder()
     {
         CreateTween()
-            .TweenMethod(Callable.From<float>(v => Material.SetShaderParameter("fade_amount", v)), 1.0f, 0.0f, 0.3f)
+            .TweenMethod(Callable.From<float>(v => Material.SetShaderParameter("fade_amount", v)), 1.0f, 0.0f, BorderTransitionSpeed)
             .SetEase(Tween.EaseType.Out)
             .SetTrans(Tween.TransitionType.Sine);
     }
