@@ -23,7 +23,7 @@ public partial class MainScene : Node3D
 
                 var native_size = new_card.GetSize();
                 new_card.Scale = new(target_card_size.X / native_size.X, target_card_size.Y, target_card_size.Y / native_size.Y);
-                new_card.GlobalPosition = new Vector3(i * (target_card_size.X + gap.X), 1f, j * (target_card_size.Y + gap.Y));
+                new_card.GlobalPosition = new Vector3(i * (target_card_size.X + gap.X), 0, j * (target_card_size.Y + gap.Y));
 
                 cards.Add(new_card);
                 new_card.SetDepth(cards.Count * depth_adjust);
