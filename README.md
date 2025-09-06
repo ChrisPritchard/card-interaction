@@ -6,8 +6,6 @@ Inspired by [Cultist Simulator](https://store.steampowered.com/app/718670/Cultis
 
 ![](./Animation.gif)
 
-(The animation here has some odd banding on the cards, but thats just an artifact of the gif - no issue in game)
-
 Biggest challenges:
 
 - all cards are 0 thick, and co-exist on the table plane (which is also 0 thick)
@@ -32,6 +30,7 @@ A few approaches were tried for the key issue, the z-fighting:
   - this approach worked and solved all problems, except one: the render priority value on shaders is a 8-bit number (well a signed 7-bit number, so -128 to 127)
   - this would mean I could only have 256 objects in the scene, if they all had their own order
   - solved with a somewhat complex function (not too bad) that would reorder overlapping objects, so only a few discrete render order values were needed at any given time (objects can share an order if they don't overlap, obviously)
+  - also, to ensure depth testing didn't mess with my precise render ordering, its turned off in the shader via depth_test_disabled.
 
 All worked rather swimmingly at the end 🙂
 
