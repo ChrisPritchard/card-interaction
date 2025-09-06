@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Godot;
 
 public partial class InputHandler : Node3D
 {
+    [Export] public MainScene Main { get; set; }
     [Export] public Camera3D Camera { get; set; }
 
     private Card dragged_card;
@@ -36,7 +36,8 @@ public partial class InputHandler : Node3D
         dragged_card = card;
         drag_start = card.GlobalPosition;
         drag_offset = card.GlobalPosition - position;
-        card.SetCollisionLayer(3);
+        Main.SetDraggedDepth(card);
+        card.SetCollisionLayer(2);
     }
 
     private void UpdateDragPosition(Vector2 screenPos)
