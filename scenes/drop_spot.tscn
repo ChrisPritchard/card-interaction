@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dujvmoccib06y" path="res://assets/drop-spot.png" id="2_7i5xk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mumx1"]
-render_priority = 0
+render_priority = -10
 shader = ExtResource("1_o2gn1")
 shader_parameter/albedo_texture = ExtResource("2_7i5xk")
 shader_parameter/albedo_color = Color(1, 1, 1, 1)

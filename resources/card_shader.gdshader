@@ -23,16 +23,16 @@ void fragment() {
 
     // the uv offsets are 0.0 to 1.0 in each direction, regardless of texture dimensions. so cards for example are slightly compressed in the vertical axis
     // this code corrects for that, by applying the x to y aspect ratio
-	vec2 aspect_corrected_thickness = vec2(line_thickness, line_thickness / aspect_ratio); 
+	vec2 aspect_corrected_thickness = vec2(line_thickness, line_thickness / aspect_ratio);
 	float outline_alpha = 0.0;
 	for (int i = 0; i < OFFSETS.length(); i++) {
-		vec4 sample_color = texture(albedo_texture, UV + OFFSETS[i] * aspect_corrected_thickness); 
+		vec4 sample_color = texture(albedo_texture, UV + OFFSETS[i] * aspect_corrected_thickness);
 		outline_alpha += sample_color.a;
 	}
 
-    // the sum of the sampled textures will be 0 when they're all transparent, 
+    // the sum of the sampled textures will be 0 when they're all transparent,
     // 1 when all opaque, and some mix when there is an edge present
-	outline_alpha = min(outline_alpha, 1.0); 
+	outline_alpha = min(outline_alpha, 1.0);
 
 	vec4 outline_color = line_color;
 	outline_color.a *= fade_amount;

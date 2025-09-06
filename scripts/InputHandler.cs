@@ -16,15 +16,17 @@ public partial class InputHandler : Node3D
     public override void _Input(InputEvent @event)
     {
         if (@event is InputEventMouseMotion move)
+        {
             if (dragged_card != null)
                 UpdateDragPosition(move.GlobalPosition);
             else
                 TestForHover(move.GlobalPosition);
+        }
         else if (@event is InputEventMouseButton click && click.ButtonIndex == MouseButton.Left)
         {
             if (click.Pressed && dragged_card == null)
                 TryStartDrag(click.GlobalPosition);
-            else if (dragged_card != null)
+            else if (dragged_card != null) // just released
                 TryEndDrag(click.GlobalPosition);
         }
     }
@@ -59,6 +61,7 @@ public partial class InputHandler : Node3D
         var result = Raycast(screenPos);
         if (result == null)
             return;
+
         var (position, card) = result.Value;
         if (card == null)
             return;
@@ -67,7 +70,7 @@ public partial class InputHandler : Node3D
         drag_start = card.GlobalPosition;
         drag_offset = card.GlobalPosition - position;
         card.RenderOrder = sbyte.MaxValue;
-        card.SetCollisionLayer(2);
+        card.SetCollisionLayer(2); // ensures that raycasts can no longer hit this card (so it can be cast *through* to where it might be dropped)
     }
 
     private void UpdateDragPosition(Vector2 screenPos)
@@ -78,6 +81,7 @@ public partial class InputHandler : Node3D
         var result = Raycast(screenPos);
         if (result == null)
             return;
+
         var (position, _) = result.Value;
         dragged_card.GlobalPosition = position + drag_offset;
 
@@ -90,9 +94,9 @@ public partial class InputHandler : Node3D
         if (dragged_card == null)
             return;
 
-        dragged_card.SetCollisionLayer(1);
+        dragged_card.SetCollisionLayer(1); // once no longer dragged, enable for raycasting again
         dragged_card = null;
-        Main.ReSortCards();
+        Main.ReSortCards(); // compress render order in groups of overlapping cards
     }
 
     private (Vector3, Card)? Raycast(Vector2 screenPos)
@@ -109,6 +113,8 @@ public partial class InputHandler : Node3D
         var position = (Vector3?)null;
 
         var result = GetWorld3D().DirectSpaceState.IntersectRay(query);
+        // this loop grabs everything that a raycast can hit at this position, then returns the top-most card
+        // at a minimum when over the table, this will result in two casts (one hits the table, one returns nothing)
         while (result.Count != 0)
         {
             position = (Vector3)result["position"];

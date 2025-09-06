@@ -20,6 +20,7 @@ public partial class Card : MeshInstance3D
     {
         if (colour != null)
             Material.SetShaderParameter("line_color", colour.Value);
+
         CreateTween()
             .TweenMethod(Callable.From<float>(v => Material.SetShaderParameter("fade_amount", v)), 0.0f, 1.0f, BorderTransitionSpeed)
             .SetEase(Tween.EaseType.Out)
