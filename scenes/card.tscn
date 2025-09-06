@@ -25,6 +25,7 @@ orientation = 1
 size = Vector3(1, 0, 1.5)
 
 [node name="Card" type="MeshInstance3D"]
+cast_shadow = 0
 mesh = SubResource("QuadMesh_8w5pg")
 script = ExtResource("2_6u4wf")
 

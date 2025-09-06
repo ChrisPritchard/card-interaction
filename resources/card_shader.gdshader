@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode depth_test_disabled;
+render_mode depth_test_disabled, shadows_disabled;
 
 // --- Main Texture ---
 uniform sampler2D albedo_texture : source_color;

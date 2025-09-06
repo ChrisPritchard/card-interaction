@@ -32,6 +32,6 @@ A few approaches were tried for the key issue, the z-fighting:
   - solved with a somewhat complex function (not too bad) that would reorder overlapping objects, so only a few discrete render order values were needed at any given time (objects can share an order if they don't overlap, obviously)
   - also, to ensure depth testing didn't mess with my precise render ordering, its turned off in the shader via depth_test_disabled.
 
-All worked rather swimmingly at the end 🙂
+All worked rather swimmingly at the end 🙂 Note, adding 3D objects in here will work rather weird without additional tuning: the cards will appear above them even though under (they have shadow reception disabled so at least they won't appear black). To fix, the 3D shapes probably also need depth testing disabled though this will prevent occlusion and a few other things from working right. A problem for the next project.
 
 **Resource Acknowledgement**: the felt green background texture is from <https://opengameart.org/content/felt-backgrounds> by <https://opengameart.org/users/jbp4444>

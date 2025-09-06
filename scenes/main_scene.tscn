@@ -1,33 +1,25 @@
-[gd_scene load_steps=12 format=3 uid="uid://cp644q1sxu623"]
+[gd_scene load_steps=9 format=3 uid="uid://cp644q1sxu623"]
 
 [ext_resource type="Script" uid="uid://cr77o0ruskefb" path="res://scripts/MainScene.cs" id="1_w2twt"]
 [ext_resource type="Texture2D" uid="uid://jc3ir0oq5et4" path="res://assets/felt_green.jpg" id="2_pw63i"]
 [ext_resource type="Script" uid="uid://c4yty0niqkapm" path="res://scripts/InputHandler.cs" id="3_7ykc4"]
 [ext_resource type="Script" uid="uid://vqanjwaknpx2" path="res://scripts/CameraController.cs" id="3_rt2n2"]
-[ext_resource type="Shader" uid="uid://d1su6ltjj5rnr" path="res://resources/ordering_shader.gdshader" id="5_gubc5"]
 
 [sub_resource type="Environment" id="Environment_7ykc4"]
 background_mode = 1
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rt2n2"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pu3yx"]
 render_priority = -128
 albedo_texture = ExtResource("2_pw63i")
 
 [sub_resource type="QuadMesh" id="QuadMesh_c16ls"]
-material = SubResource("StandardMaterial3D_rt2n2")
+material = SubResource("StandardMaterial3D_pu3yx")
 size = Vector2(20, 20)
 orientation = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pw63i"]
 margin = 0.0
 size = Vector3(20, 0, 20)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rt2n2"]
-render_priority = 0
-shader = ExtResource("5_gubc5")
-
-[sub_resource type="SphereMesh" id="SphereMesh_gubc5"]
-material = SubResource("ShaderMaterial_rt2n2")
 
 [node name="MainScene" type="Node3D"]
 script = ExtResource("1_w2twt")
@@ -49,14 +41,10 @@ shadow_enabled = true
 sky_mode = 1
 
 [node name="Table" type="MeshInstance3D" parent="."]
+layers = 2
 mesh = SubResource("QuadMesh_c16ls")
 
 [node name="Area3D" type="Area3D" parent="Table"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Table/Area3D"]
 shape = SubResource("BoxShape3D_pw63i")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.475977, 1.94492, 0.920727)
-layers = 2
-mesh = SubResource("SphereMesh_gubc5")
