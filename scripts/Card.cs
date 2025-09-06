@@ -24,19 +24,24 @@ public partial class Card : MeshInstance3D
     {
         SetSurfaceOverrideMaterial(0, (Material)GetActiveMaterial(0).Duplicate());
         Depth = depth;
-
-        CollisionArea.MouseEntered += OnMouseEntered;
-        CollisionArea.MouseExited += OnMouseExited;
     }
 
-    private void OnMouseEntered()
+    public void ShowBorder(Color? colour = null)
     {
-        Material.SetShaderParameter("fade_amount", 1);
+        if (colour != null)
+            Material.SetShaderParameter("line_color", colour.Value);
+        CreateTween()
+            .TweenMethod(Callable.From<float>(v => Material.SetShaderParameter("fade_amount", v)), 0.0f, 1.0f, 0.3f)
+            .SetEase(Tween.EaseType.Out)
+            .SetTrans(Tween.TransitionType.Sine);
     }
 
-    private void OnMouseExited()
+    public void HideBorder()
     {
-        Material.SetShaderParameter("fade_amount", 0);
+        CreateTween()
+            .TweenMethod(Callable.From<float>(v => Material.SetShaderParameter("fade_amount", v)), 1.0f, 0.0f, 0.3f)
+            .SetEase(Tween.EaseType.Out)
+            .SetTrans(Tween.TransitionType.Sine);
     }
 
     internal void SetCollisionLayer(int layer) => CollisionArea.CollisionLayer = (uint)(1 << (layer - 1));
