@@ -1,5 +1,4 @@
 
-using System;
 using Godot;
 
 public partial class Card : MeshInstance3D
