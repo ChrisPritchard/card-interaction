@@ -8,13 +8,17 @@ public partial class InputHandler : Node3D
     [Export] public Camera3D Camera { get; set; }
 
     private Card dragged_card;
+    private Card hover_card;
     private Vector3 drag_offset;
     private Vector3 drag_start;
 
     public override void _Input(InputEvent @event)
     {
-        if (@event is InputEventMouseMotion move && dragged_card != null)
-            UpdateDragPosition(move.Position);
+        if (@event is InputEventMouseMotion move)
+            if (dragged_card != null)
+                UpdateDragPosition(move.GlobalPosition);
+            else
+                TestForHover(move.GlobalPosition);
         else if (@event is InputEventMouseButton click && click.ButtonIndex == MouseButton.Left)
         {
             if (click.Pressed && dragged_card == null)
@@ -22,6 +26,27 @@ public partial class InputHandler : Node3D
             else if (dragged_card != null)
                 TryEndDrag(click.GlobalPosition);
         }
+    }
+
+    private void TestForHover(Vector2 screenPos)
+    {
+        var result = Raycast(screenPos);
+        if (result == null)
+            return;
+        var (_, card) = result.Value;
+        if (card == null)
+        {
+            hover_card?.HideBorder();
+            hover_card = null;
+            return;
+        }
+
+        if (card == hover_card)
+            return;
+        if (hover_card != null)
+            hover_card?.HideBorder();
+        hover_card = card;
+        card.ShowBorder();
     }
 
     private void TryStartDrag(Vector2 screenPos)
@@ -33,6 +58,8 @@ public partial class InputHandler : Node3D
         if (card == null)
             return;
 
+        hover_card?.HideBorder();
+        hover_card = null;
         dragged_card = card;
         drag_start = card.GlobalPosition;
         drag_offset = card.GlobalPosition - position;
