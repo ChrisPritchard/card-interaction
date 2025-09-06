@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://cp644q1sxu623"]
+[gd_scene load_steps=11 format=3 uid="uid://cp644q1sxu623"]
 
 [ext_resource type="Script" uid="uid://cr77o0ruskefb" path="res://scripts/MainScene.cs" id="1_w2twt"]
 [ext_resource type="Texture2D" uid="uid://jc3ir0oq5et4" path="res://assets/felt_green.jpg" id="2_pw63i"]
 [ext_resource type="Script" uid="uid://c4yty0niqkapm" path="res://scripts/InputHandler.cs" id="3_7ykc4"]
+[ext_resource type="Script" uid="uid://vqanjwaknpx2" path="res://scripts/CameraController.cs" id="3_rt2n2"]
 [ext_resource type="Shader" uid="uid://bt8eqm6g4xy6u" path="res://resources/table_shader.gdshader" id="4_gubc5"]
 [ext_resource type="PackedScene" uid="uid://bc2womwx0o0n8" path="res://scenes/card.tscn" id="5_gubc5"]
 
@@ -34,9 +35,11 @@ transform = Transform3D(1, 0, 0, 0, 0.374607, 0.927184, 0, -0.927184, 0.374607, 
 environment = SubResource("Environment_7ykc4")
 near = 0.001
 far = 20.0
+script = ExtResource("3_rt2n2")
 
-[node name="InputHandler" type="Node3D" parent="Camera3D"]
+[node name="InputHandler" type="Node3D" parent="Camera3D" node_paths=PackedStringArray("Camera")]
 script = ExtResource("3_7ykc4")
+Camera = NodePath("..")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.263671, 0.964613, 0, -0.964613, 0.263671, 0, 1.788, 0)
