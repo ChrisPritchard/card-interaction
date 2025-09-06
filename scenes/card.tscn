@@ -31,6 +31,7 @@ script = ExtResource("2_6u4wf")
 CollisionArea = NodePath("Area3D")
 
 [node name="Area3D" type="Area3D" parent="."]
+monitoring = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 shape = ExtResource("3_ktuci")

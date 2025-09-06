@@ -63,7 +63,6 @@ public partial class InputHandler : Node3D
         // if (card != null)
         //     dragged_card.GlobalPosition = card.GlobalPosition + new Vector3(0, 0.02f, 0);
 
-        //dragged_card.RenderPriority = 0;
         dragged_card.SetCollisionLayer(1);
         dragged_card = null;
     }
@@ -74,13 +73,12 @@ public partial class InputHandler : Node3D
         var to = from + Camera.ProjectRayNormal(screenPos) * 100;
 
         var query = PhysicsRayQueryParameters3D.Create(from, to);
-        query.CollisionMask = 1 << 0;
         var result = GetWorld3D().DirectSpaceState.IntersectRay(query);
 
         if (result.Count == 0)
             return null;
 
-        if (result["collider"].As<StaticBody3D>()?.Owner is Card card)
+        if (result["collider"].As<Area3D>()?.GetParent() is Card card)
         {
             GD.Print("card found");
             return ((Vector3)result["position"], card);
