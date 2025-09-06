@@ -1,4 +1,5 @@
 
+using System;
 using Godot;
 
 public partial class Card : MeshInstance3D
@@ -13,14 +14,29 @@ public partial class Card : MeshInstance3D
         {
             depth = value;
             if (IsNodeReady())
-                (GetSurfaceOverrideMaterial(0) as ShaderMaterial).SetShaderParameter("depth_setting", value);
+                Material.SetShaderParameter("depth_setting", value);
         }
     }
+
+    private ShaderMaterial Material { get => GetSurfaceOverrideMaterial(0) as ShaderMaterial; }
 
     public override void _Ready()
     {
         SetSurfaceOverrideMaterial(0, (Material)GetActiveMaterial(0).Duplicate());
         Depth = depth;
+
+        CollisionArea.MouseEntered += OnMouseEntered;
+        CollisionArea.MouseExited += OnMouseExited;
+    }
+
+    private void OnMouseEntered()
+    {
+        Material.SetShaderParameter("fade_amount", 1);
+    }
+
+    private void OnMouseExited()
+    {
+        Material.SetShaderParameter("fade_amount", 0);
     }
 
     internal void SetCollisionLayer(int layer) => CollisionArea.CollisionLayer = (uint)(1 << (layer - 1));
