@@ -9,7 +9,7 @@ public partial class InputHandler : Node3D
 
     private Card dragged_card;
     private Card hover_card;
-    private bool can_hover = true;
+    private Card last_hover_card;
     private Vector3 drag_offset;
     private Vector3 drag_start;
 
@@ -37,19 +37,19 @@ public partial class InputHandler : Node3D
         var (_, card) = result.Value;
         if (card == null)
         {
-            can_hover = true;
+            last_hover_card = null; // over empty space - can return and hover over the same card
             hover_card?.HideBorder();
             hover_card = null;
             return;
         }
 
-        if (!can_hover || card == hover_card)
+        if (card == hover_card || card == last_hover_card)
             return;
 
         if (hover_card != null)
             hover_card?.HideBorder();
 
-        can_hover = false; // can't hover again until mouse leaves the card
+        last_hover_card = card; // can't hover over this card again until another card or empty space is encoutered
         hover_card = card;
         card.ShowBorder();
     }
