@@ -11,7 +11,7 @@ uniform float color_tolerance : hint_range(0.0, 0.1, 0.001) = 0.01;
 
 void fragment() {
     vec4 tex_color = texture(albedo_texture, UV);
-    
+
     float color_diff = distance(tex_color.rgb, border_mask.rgb);
     if (color_diff < color_tolerance) {
         ALBEDO = border_color.rgb;

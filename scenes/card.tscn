@@ -24,10 +24,9 @@ orientation = 1
 [sub_resource type="BoxShape3D" id="BoxShape3D_6u4wf"]
 size = Vector3(1, 0, 1.5)
 
-[node name="Card" type="MeshInstance3D" node_paths=PackedStringArray("CollisionArea")]
+[node name="Card" type="MeshInstance3D"]
 mesh = SubResource("QuadMesh_8w5pg")
 script = ExtResource("2_6u4wf")
-CollisionArea = NodePath("Area3D")
 
 [node name="Area3D" type="Area3D" parent="."]
 

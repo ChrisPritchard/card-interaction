@@ -38,10 +38,8 @@ near = 0.001
 far = 20.0
 script = ExtResource("3_rt2n2")
 
-[node name="InputHandler" type="Node3D" parent="Camera3D" node_paths=PackedStringArray("Main", "Camera")]
+[node name="InputHandler" type="Node3D" parent="Camera3D"]
 script = ExtResource("3_7ykc4")
-Main = NodePath("../..")
-Camera = NodePath("..")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.263671, 0.964613, 0, -0.964613, 0.263671, 0, 1.788, 0)

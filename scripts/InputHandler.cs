@@ -4,14 +4,21 @@ using Godot;
 
 public partial class InputHandler : Node3D
 {
-    [Export] public MainScene Main { get; set; }
-    [Export] public Camera3D Camera { get; set; }
+    private MainScene mainRoot;
+
+    private Camera3D camera;
 
     private Card dragged_card;
     private Card hover_card;
     private Card last_hover_card;
     private Vector3 drag_offset;
     private Vector3 drag_start;
+
+    public override void _Ready()
+    {
+        mainRoot = GetTree().CurrentScene as MainScene;
+        camera = GetParent<Camera3D>();
+    }
 
     public override void _Input(InputEvent @event)
     {
@@ -96,13 +103,13 @@ public partial class InputHandler : Node3D
 
         dragged_card.SetCollisionLayer(1); // once no longer dragged, enable for raycasting again
         dragged_card = null;
-        Main.ReSortCards(); // compress render order in groups of overlapping cards
+        mainRoot.ReSortCards(); // compress render order in groups of overlapping cards
     }
 
     private (Vector3, Card)? Raycast(Vector2 screenPos)
     {
-        var from = Camera.ProjectRayOrigin(screenPos);
-        var to = from + Camera.ProjectRayNormal(screenPos) * 100;
+        var from = camera.ProjectRayOrigin(screenPos);
+        var to = from + camera.ProjectRayNormal(screenPos) * 100;
 
         var query = PhysicsRayQueryParameters3D.Create(from, to);
         query.CollideWithAreas = true;

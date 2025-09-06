@@ -4,7 +4,7 @@ using Godot;
 
 public partial class MainScene : Node3D
 {
-    [Export] public PackedScene CardScene { get; set; }
+    private PackedScene cardScene;
 
     private readonly Vector2 card_size = new(1, 1.5f);
 
@@ -14,12 +14,13 @@ public partial class MainScene : Node3D
 
     public override void _Ready()
     {
+        cardScene = GD.Load<PackedScene>("res://scenes/card.tscn");
         var gap = 0.05f * card_size;
 
         for (var i = 0; i < 5; i++)
             for (var j = 0; j < 5; j++)
             {
-                var new_card = CardScene.Instantiate<Card>();
+                var new_card = cardScene.Instantiate<Card>();
                 AddChild(new_card);
 
                 var native_size = new_card.GetSize();
