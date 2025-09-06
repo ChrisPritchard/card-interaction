@@ -26,7 +26,8 @@ public partial class MainScene : Node3D
                 new_card.GlobalPosition = new Vector3(i * (target_card_size.X + gap.X), 0, j * (target_card_size.Y + gap.Y));
 
                 cards.Add(new_card);
-                new_card.SetDepth(cards.Count * depth_adjust);
+                new_card.SetCollisionLayer(1);
+                new_card.Depth = cards.Count * depth_adjust;
             }
     }
 
