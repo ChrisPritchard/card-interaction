@@ -63,8 +63,6 @@ public partial class InputHandler : Node3D
         if (card == null)
             return;
 
-        hover_card?.HideBorder();
-        hover_card = null;
         dragged_card = card;
         drag_start = card.GlobalPosition;
         drag_offset = card.GlobalPosition - position;
@@ -82,6 +80,9 @@ public partial class InputHandler : Node3D
             return;
         var (position, _) = result.Value;
         dragged_card.GlobalPosition = position + drag_offset;
+
+        hover_card?.HideBorder();
+        hover_card = null;
     }
 
     private void TryEndDrag(Vector2 screenPos)
