@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, depth_draw_always;
+render_mode depth_draw_always;
 
 // --- Depth Control ---
 uniform float depth_setting : hint_range(0.0, 1.0, 0.001) = 0.0;

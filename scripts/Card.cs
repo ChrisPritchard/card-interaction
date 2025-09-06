@@ -6,7 +6,7 @@ public partial class Card : MeshInstance3D
 {
     [Export] public Area3D CollisionArea;
 
-    [Export] public float BorderTransitionSpeed = 0.8f;
+    [Export] public float BorderTransitionSpeed = 0.5f;
 
     private float depth;
     public float Depth

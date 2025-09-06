@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://cp644q1sxu623"]
+[gd_scene load_steps=12 format=3 uid="uid://cp644q1sxu623"]
 
 [ext_resource type="Script" uid="uid://cr77o0ruskefb" path="res://scripts/MainScene.cs" id="1_w2twt"]
 [ext_resource type="Texture2D" uid="uid://jc3ir0oq5et4" path="res://assets/felt_green.jpg" id="2_pw63i"]
 [ext_resource type="Script" uid="uid://c4yty0niqkapm" path="res://scripts/InputHandler.cs" id="3_7ykc4"]
+[ext_resource type="PackedScene" uid="uid://becba32mwgemt" path="res://scenes/drop_spot.tscn" id="3_c16ls"]
 [ext_resource type="Script" uid="uid://vqanjwaknpx2" path="res://scripts/CameraController.cs" id="3_rt2n2"]
 [ext_resource type="Shader" uid="uid://bt8eqm6g4xy6u" path="res://resources/table_shader.gdshader" id="4_gubc5"]
 [ext_resource type="PackedScene" uid="uid://bc2womwx0o0n8" path="res://scenes/card.tscn" id="5_gubc5"]
@@ -29,6 +30,9 @@ size = Vector3(20, 0, 20)
 [node name="MainScene" type="Node3D"]
 script = ExtResource("1_w2twt")
 CardScene = ExtResource("5_gubc5")
+
+[node name="DropSpot" parent="." instance=ExtResource("3_c16ls")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 0, 0)
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.374607, 0.927184, 0, -0.927184, 0.374607, 0, 6, 3)
