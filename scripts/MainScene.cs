@@ -31,6 +31,13 @@ public partial class MainScene : Node3D
             }
     }
 
+    /// <summary>
+    /// Render order is an sbyte, -127 to 126 or something. if every card is perfectly compressed in order, so values only diff by 1, 
+    /// this makes an upper limit of 256 cards (ignoring the table or anything else that needs render ordering).
+    /// This function solves this by realising that if two cards are not overlapping, their render order is irrelevant (as long as its 
+    /// in front of the table) - e.g. they could be the same or whatever.
+    /// Only the cards that overlap each other need their order to be different, so this function finds those groups and compresses their order individually.
+    /// </summary>
     public void ReSortCards()
     {
         var n = cards.Count;
@@ -40,7 +47,7 @@ public partial class MainScene : Node3D
 
         Rect2 Rect(Card c) => new(new(c.Position.X, c.Position.Z), card_size);
 
-        // Find with path compression (finds the root, and while doing so, ensures each element of the group also points to this root)
+        // find with path compression (finds the root, and while doing so, ensures each element of the group also points to this root)
         int Find(int x) => parent[x] == x ? x : parent[x] = Find(parent[x]);
 
         // if two elements (x, y) have different roots, one root is made the parent of the other (groups therefore joined)
@@ -52,6 +59,7 @@ public partial class MainScene : Node3D
                 parent[rootY] = rootX;
         }
 
+        // using the above functions, whenever cards overlap other cards, ensure all such cards have the same root
         for (var i = 0; i < n; i++)
         {
             var rectI = Rect(cards[i]);
