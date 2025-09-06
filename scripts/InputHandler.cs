@@ -61,6 +61,7 @@ public partial class InputHandler : Node3D
         last_hover_card = card; // can't hover over this card again until another card or empty space is encountered
         hover_card = card;
         card.ShowBorder();
+        GD.Print($"{card.Name} - RO: {card.RenderOrder}");
     }
 
     private void TryStartDrag(Vector2 screenPos)

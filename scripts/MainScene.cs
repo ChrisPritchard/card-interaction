@@ -26,6 +26,7 @@ public partial class MainScene : Node3D
                 var native_size = new_card.GetSize();
                 new_card.Scale = new(card_size.X / native_size.X, 1, card_size.Y / native_size.Y);
                 new_card.GlobalPosition = new Vector3(i * (card_size.X + gap.X), 0, j * (card_size.Y + gap.Y));
+                new_card.Name = "Card_" + (i * 5 + j);
 
                 cards.Add(new_card);
                 new_card.SetCollisionLayer(1);
