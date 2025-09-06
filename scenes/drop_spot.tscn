@@ -11,8 +11,6 @@ shader_parameter/albedo_color = Color(1, 1, 1, 1)
 shader_parameter/border_color = Color(0.376471, 0.45098, 0.709804, 1)
 shader_parameter/border_mask = Color(1, 0, 0.8627, 1)
 shader_parameter/color_tolerance = 0.01
-shader_parameter/depth_setting = 0.005
-shader_parameter/alpha_cutoff = 0.2
 
 [sub_resource type="QuadMesh" id="QuadMesh_8ubnl"]
 material = SubResource("ShaderMaterial_mumx1")

@@ -7,24 +7,13 @@ public partial class Card : MeshInstance3D
 
     [Export] public float BorderTransitionSpeed = 0.5f;
 
-    private float depth;
-    public float Depth
-    {
-        get => depth;
-        set
-        {
-            depth = value;
-            if (IsNodeReady())
-                Material.SetShaderParameter("depth_setting", value);
-        }
-    }
+    [Export] public sbyte RenderOrder { get => (sbyte)Material.RenderPriority; set => Material.RenderPriority = value; }
 
     private ShaderMaterial Material { get => GetSurfaceOverrideMaterial(0) as ShaderMaterial; }
 
     public override void _Ready()
     {
         SetSurfaceOverrideMaterial(0, (Material)GetActiveMaterial(0).Duplicate());
-        Depth = depth;
     }
 
     public void ShowBorder(Color? colour = null)

@@ -6,16 +6,15 @@ public partial class MainScene : Node3D
 {
     [Export] public PackedScene CardScene { get; set; }
 
-    private readonly Vector2 target_card_size = new(1, 1.5f);
+    private readonly Vector2 card_size = new(1, 1.5f);
 
     private readonly List<Card> cards = [];
 
-    private const float card_depth_base = 0.01f;
-    private const float depth_adjust = 0.001f;
+    private const sbyte card_render_order_start = 0;
 
     public override void _Ready()
     {
-        var gap = 0.05f * target_card_size;
+        var gap = 0.05f * card_size;
 
         for (var i = 0; i < 5; i++)
             for (var j = 0; j < 5; j++)
@@ -24,22 +23,66 @@ public partial class MainScene : Node3D
                 AddChild(new_card);
 
                 var native_size = new_card.GetSize();
-                new_card.Scale = new(target_card_size.X / native_size.X, 1, target_card_size.Y / native_size.Y);
-                new_card.GlobalPosition = new Vector3(i * (target_card_size.X + gap.X), 0, j * (target_card_size.Y + gap.Y));
+                new_card.Scale = new(card_size.X / native_size.X, 1, card_size.Y / native_size.Y);
+                new_card.GlobalPosition = new Vector3(i * (card_size.X + gap.X), 0, j * (card_size.Y + gap.Y));
 
                 cards.Add(new_card);
                 new_card.SetCollisionLayer(1);
-                new_card.Depth = card_depth_base + cards.Count * depth_adjust;
             }
     }
 
-    public void BringToTop(Card card)
+    public void ReSortCards()
     {
-        var max_depth = cards.Select(c => c.Depth).Max();
-        card.Depth = max_depth + depth_adjust;
+        var n = cards.Count;
+        var parent = new int[n];
+        for (int i = 0; i < n; i++)
+            parent[i] = i;
 
-        cards.OrderBy(o => o.Depth)
-            .Select((card, i) => (card, new_depth: card_depth_base + i * depth_adjust))
-            .ToList().ForEach(o => o.card.Depth = o.new_depth);
+
+        Rect2 Rect(Card c) => new(new(c.Position.X, c.Position.Z), card_size);
+
+        // Find with path compression
+        int Find(int x) => parent[x] == x ? x : parent[x] = Find(parent[x]);
+
+        // Union sets when rectangles overlap
+        void Union(int x, int y)
+        {
+            int rootX = Find(x);
+            int rootY = Find(y);
+            if (rootX != rootY) parent[rootY] = rootX;
+        }
+
+        // Check all pairs for overlap
+        for (int i = 0; i < n; i++)
+        {
+            var rectI = Rect(cards[i]);
+            for (int j = i + 1; j < n; j++)
+            {
+                var rectJ = Rect(cards[j]);
+                if (rectI.Intersects(rectJ))
+                {
+                    Union(i, j);
+                }
+            }
+        }
+
+        // Group objects by their root parent
+        var groupsDict = new Dictionary<int, List<Card>>();
+        for (var i = 0; i < n; i++)
+        {
+            var root = Find(i);
+            if (!groupsDict.ContainsKey(root))
+                groupsDict[root] = [];
+            groupsDict[root].Add(cards[i]);
+        }
+
+        foreach (var group in groupsDict.Values)
+        {
+            if (group.Count == 0)
+                group[0].RenderOrder = 0;
+            else
+                group.OrderBy(c => c.RenderOrder).Select((card, index) => (card, index)).ToList().ForEach(o =>
+                    o.card.RenderOrder = (sbyte)(card_render_order_start + (sbyte)o.index));
+        }
     }
 }

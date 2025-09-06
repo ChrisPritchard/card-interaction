@@ -66,7 +66,7 @@ public partial class InputHandler : Node3D
         dragged_card = card;
         drag_start = card.GlobalPosition;
         drag_offset = card.GlobalPosition - position;
-        Main.BringToTop(card);
+        card.RenderOrder = sbyte.MaxValue;
         card.SetCollisionLayer(2);
     }
 
@@ -90,17 +90,9 @@ public partial class InputHandler : Node3D
         if (dragged_card == null)
             return;
 
-        // var result = Raycast(screenPos);
-        // if (result == null)
-        //     return;
-
-        // var (_, card) = result.Value;
-
-        // if (card != null)
-        //     dragged_card.GlobalPosition = card.GlobalPosition + new Vector3(0, 0.02f, 0);
-
         dragged_card.SetCollisionLayer(1);
         dragged_card = null;
+        Main.ReSortCards();
     }
 
     private (Vector3, Card)? Raycast(Vector2 screenPos)
@@ -135,6 +127,6 @@ public partial class InputHandler : Node3D
         if (cards.Count == 0)
             return (position.Value, null);
 
-        return (position.Value, cards.MaxBy(c => c.Depth));
+        return (position.Value, cards.MaxBy(c => c.RenderOrder));
     }
 }
