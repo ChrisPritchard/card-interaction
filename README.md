@@ -32,3 +32,7 @@ A few approaches were tried for the key issue, the z-fighting:
   - this approach worked and solved all problems, except one: the render priority value on shaders is a 8-bit number (well a signed 7-bit number, so -128 to 127)
   - this would mean I could only have 256 objects in the scene, if they all had their own order
   - solved with a somewhat complex function (not too bad) that would reorder overlapping objects, so only a few discrete render order values were needed at any given time (objects can share an order if they don't overlap, obviously)
+
+All worked rather swimmingly at the end 🙂
+
+**Resource Acknowledgement**: the felt green background texture is from <https://opengameart.org/content/felt-backgrounds> by <https://opengameart.org/users/jbp4444>
