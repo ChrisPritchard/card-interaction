@@ -33,7 +33,7 @@ public partial class MainScene : Node3D
             }
     }
 
-    public void SetDraggedDepth(Card card)
+    public void BringToTop(Card card)
     {
         var max_depth = cards.Select(c => c.Depth).Max();
         card.Depth = max_depth + depth_adjust;

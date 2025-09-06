@@ -36,7 +36,7 @@ public partial class InputHandler : Node3D
         dragged_card = card;
         drag_start = card.GlobalPosition;
         drag_offset = card.GlobalPosition - position;
-        Main.SetDraggedDepth(card);
+        Main.BringToTop(card);
         card.SetCollisionLayer(2);
     }
 
