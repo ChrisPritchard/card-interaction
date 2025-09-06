@@ -24,7 +24,7 @@ orientation = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pw63i"]
 margin = 0.0
-size = Vector3(20, 0.1, 20)
+size = Vector3(20, 0, 20)
 
 [node name="MainScene" type="Node3D"]
 script = ExtResource("1_w2twt")

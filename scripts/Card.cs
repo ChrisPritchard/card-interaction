@@ -23,7 +23,7 @@ public partial class Card : MeshInstance3D
         Depth = depth;
     }
 
-    internal void SetCollisionLayer(int layer) => CollisionArea.CollisionLayer = (uint)(0 << (layer - 1));
+    internal void SetCollisionLayer(int layer) => CollisionArea.CollisionLayer = (uint)(1 << (layer - 1));
 
     internal Vector2 GetSize() => new(GetAabb().Size.X, GetAabb().Size.Z);
 }
