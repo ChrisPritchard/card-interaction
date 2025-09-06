@@ -9,7 +9,7 @@ public partial class Card : MeshInstance3D
 
     internal void SetCollisionLayer(int layer) => CollisionArea.CollisionLayer = (uint)(0 << (layer - 1));
 
-    internal Vector3 GetSize() => GetAabb().Size;
+    internal Vector2 GetSize() => new(GetAabb().Size.X, GetAabb().Size.Z);
 
     public override void _Ready()
     {
