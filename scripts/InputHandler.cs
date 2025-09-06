@@ -74,8 +74,6 @@ public partial class InputHandler : Node3D
         var from = Camera.ProjectRayOrigin(screenPos);
         var to = from + Camera.ProjectRayNormal(screenPos) * 100;
 
-        GD.Print($"ray from {from} to {to}");
-
         var query = PhysicsRayQueryParameters3D.Create(from, to);
         query.CollideWithAreas = true;
         query.CollideWithBodies = false;
@@ -101,10 +99,7 @@ public partial class InputHandler : Node3D
         if (!position.HasValue)
             return null;
         if (cards.Count == 0)
-        {
-            GD.Print("no card");
             return (position.Value, null);
-        }
 
         return (position.Value, cards.MaxBy(c => c.Depth));
     }
