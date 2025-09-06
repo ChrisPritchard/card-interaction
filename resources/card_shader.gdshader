@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, cull_disabled, depth_draw_always;
+render_mode unshaded, depth_draw_always;
 
 // --- Depth Control ---
 uniform float depth_setting : hint_range(0.0, 1.0, 0.001) = 0.0;
@@ -7,6 +7,7 @@ uniform float depth_setting : hint_range(0.0, 1.0, 0.001) = 0.0;
 // --- Main Texture ---
 uniform sampler2D albedo_texture : source_color;
 uniform vec4 modulate_color : source_color = vec4(1.0);
+uniform float aspect_ratio = 1.5;
 
 // --- Border Effect ---
 uniform vec4 line_color : source_color = vec4(1.0);
@@ -17,7 +18,7 @@ uniform float fade_amount : hint_range(0, 1) = 1.0;
 uniform float border_progress : hint_range(0, 1) = 1.0;
 
 // --- Alpha Scissor Threshold ---
-uniform float alpha_cutoff : hint_range(0, 1) = 0.5; // NEW: Added cutoff parameter
+uniform float alpha_cutoff : hint_range(0, 1) = 0.2; // NEW: Added cutoff parameter
 
 // Sample pattern for the outline
 const vec2 OFFSETS[8] = vec2[8](
@@ -31,13 +32,17 @@ void fragment() {
 	vec4 color = texture(albedo_texture, UV);
 	color *= modulate_color;
 
+	// --- Aspect Ratio Correction ---
+	vec2 aspect_corrected_thickness = vec2(line_thickness, line_thickness / aspect_ratio);
+	// -----------------------------------------
+
 	// 2. Apply the border outline effect
 	// Use a fixed size based on line_thickness (now in UV space, 0-1 range)
 	float outline_alpha = 0.0;
 
 	for (int i = 0; i < OFFSETS.length(); i++) {
 		// Sample around the current UV position
-		vec4 sample_color = texture(albedo_texture, UV + OFFSETS[i] * line_thickness);
+		vec4 sample_color = texture(albedo_texture, UV + OFFSETS[i] * aspect_corrected_thickness);
 		outline_alpha += sample_color.a;
 	}
 	outline_alpha = min(outline_alpha, 1.0);

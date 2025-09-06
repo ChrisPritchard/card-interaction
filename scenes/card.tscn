@@ -12,6 +12,7 @@ shader = ExtResource("1_ktuci")
 shader_parameter/depth_setting = 0.0
 shader_parameter/albedo_texture = ExtResource("2_kg30u")
 shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/aspect_ratio = 1.5
 shader_parameter/line_color = Color(1, 1, 1, 1)
 shader_parameter/line_thickness = 0.04
 shader_parameter/fade_amount = 0.0
