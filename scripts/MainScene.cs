@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 public partial class MainScene : Node3D
@@ -9,7 +10,8 @@ public partial class MainScene : Node3D
 
     private readonly List<Card> cards = [];
 
-    private const float depth_adjust = 0.01f;
+    private const float card_depth_base = 0.01f;
+    private const float depth_adjust = 0.001f;
 
     public override void _Ready()
     {
@@ -27,8 +29,17 @@ public partial class MainScene : Node3D
 
                 cards.Add(new_card);
                 new_card.SetCollisionLayer(1);
-                new_card.Depth = cards.Count * depth_adjust;
+                new_card.Depth = card_depth_base + cards.Count * depth_adjust;
             }
     }
 
+    public void SetDraggedDepth(Card card)
+    {
+        var max_depth = cards.Select(c => c.Depth).Max();
+        card.Depth = max_depth + depth_adjust;
+
+        cards.OrderBy(o => o.Depth)
+            .Select((card, i) => (card, new_depth: card_depth_base + i * depth_adjust))
+            .ToList().ForEach(o => o.card.Depth = o.new_depth);
+    }
 }

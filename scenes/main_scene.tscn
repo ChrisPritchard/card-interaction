@@ -38,8 +38,9 @@ near = 0.001
 far = 20.0
 script = ExtResource("3_rt2n2")
 
-[node name="InputHandler" type="Node3D" parent="Camera3D" node_paths=PackedStringArray("Camera")]
+[node name="InputHandler" type="Node3D" parent="Camera3D" node_paths=PackedStringArray("Main", "Camera")]
 script = ExtResource("3_7ykc4")
+Main = NodePath("../..")
 Camera = NodePath("..")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
