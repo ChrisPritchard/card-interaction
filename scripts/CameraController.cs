@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public partial class CameraController : Camera3D
 {
@@ -21,32 +20,30 @@ public partial class CameraController : Camera3D
     [Export]
     public Vector2 ZLimits { get; set; } = new Vector2(-3, 10);
 
-    private Vector2 _touchStartPosition;
-    private bool _isTouching = false;
-    private Vector3 _currentVelocity = Vector3.Zero;
-    private Vector3 _inputDirection = Vector3.Zero;
+    private Vector2 touchStartPosition;
+    private bool isTouching = false;
+    private Vector3 currentVelocity = Vector3.Zero;
+    private Vector3 inputDirection = Vector3.Zero;
 
     public override void _Input(InputEvent @event)
     {
-        // Handle touch input
         if (@event is InputEventScreenTouch touchEvent)
         {
             if (touchEvent.Pressed)
             {
-                _touchStartPosition = touchEvent.Position;
-                _isTouching = true;
+                touchStartPosition = touchEvent.Position;
+                isTouching = true;
             }
             else
             {
-                _isTouching = false;
+                isTouching = false;
             }
         }
-        else if (@event is InputEventScreenDrag dragEvent && _isTouching)
+        else if (@event is InputEventScreenDrag dragEvent && isTouching)
         {
-            Vector2 dragDelta = (_touchStartPosition - dragEvent.Position) * TouchSensitivity;
-            // For touch, we'll set the input direction directly
-            _inputDirection = new Vector3(dragDelta.X, 0, dragDelta.Y).Normalized();
-            _touchStartPosition = dragEvent.Position;
+            Vector2 dragDelta = (touchStartPosition - dragEvent.Position) * TouchSensitivity;
+            inputDirection = new Vector3(dragDelta.X, 0, dragDelta.Y).Normalized();
+            touchStartPosition = dragEvent.Position;
         }
     }
 
@@ -58,61 +55,51 @@ public partial class CameraController : Camera3D
 
     private void HandleKeyboardInput()
     {
-        _inputDirection = Vector3.Zero;
+        inputDirection = Vector3.Zero;
 
-        // WASD and Arrow keys input
         if (Input.IsActionPressed("ui_right"))
-            _inputDirection.X += 1;
+            inputDirection.X += 1;
         if (Input.IsActionPressed("ui_left"))
-            _inputDirection.X -= 1;
+            inputDirection.X -= 1;
         if (Input.IsActionPressed("ui_down"))
-            _inputDirection.Z += 1;
+            inputDirection.Z += 1;
         if (Input.IsActionPressed("ui_up"))
-            _inputDirection.Z -= 1;
+            inputDirection.Z -= 1;
 
-        // Normalize diagonal movement
-        if (_inputDirection.Length() > 0)
-        {
-            _inputDirection = _inputDirection.Normalized();
-        }
+        if (inputDirection.Length() > 0)
+            inputDirection = inputDirection.Normalized();
     }
 
     private void ApplyMovement(float delta)
     {
-        Vector3 targetVelocity = _inputDirection * MovementSpeed;
+        var targetVelocity = inputDirection * MovementSpeed;
 
-        // Apply acceleration or deceleration
-        if (_inputDirection.Length() > 0)
+        if (inputDirection.Length() > 0)
         {
-            // Accelerate towards target velocity
-            _currentVelocity = _currentVelocity.Lerp(targetVelocity, Acceleration * delta);
+            currentVelocity = currentVelocity.Lerp(targetVelocity, Acceleration * delta);
         }
         else
         {
-            // Decelerate to zero
-            _currentVelocity = _currentVelocity.Lerp(Vector3.Zero, Deceleration * delta);
-
-            // Stop completely when very close to zero to prevent tiny movements
-            if (_currentVelocity.Length() < 0.1f)
+            currentVelocity = currentVelocity.Lerp(Vector3.Zero, Deceleration * delta);
+            if (currentVelocity.Length() < 0.1f)
             {
-                _currentVelocity = Vector3.Zero;
+                currentVelocity = Vector3.Zero;
             }
         }
 
-        // Only move if we have meaningful velocity
-        if (_currentVelocity.Length() > 0.01f)
+        if (currentVelocity.Length() > 0.01f)
         {
-            MoveCamera(_currentVelocity * delta);
+            MoveCamera(currentVelocity * delta);
         }
     }
 
     private void MoveCamera(Vector3 movement)
     {
-        if (movement.Length() == 0) return;
+        if (movement.Length() == 0)
+            return;
 
         Vector3 newPosition = GlobalPosition + movement;
 
-        // Apply your specified limits
         newPosition.X = Mathf.Clamp(newPosition.X, XLimits.X, XLimits.Y);
         newPosition.Z = Mathf.Clamp(newPosition.Z, ZLimits.X, ZLimits.Y);
 
