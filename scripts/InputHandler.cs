@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Godot;
 
 public partial class InputHandler : Node3D
@@ -12,12 +15,12 @@ public partial class InputHandler : Node3D
     {
         if (@event is InputEventMouseMotion move && dragged_card != null)
             UpdateDragPosition(move.Position);
-        else if (@event is InputEventMouseButton touch && touch.ButtonIndex == MouseButton.Left)
+        else if (@event is InputEventMouseButton click && click.ButtonIndex == MouseButton.Left)
         {
-            if (touch.Pressed && dragged_card == null)
-                TryStartDrag(touch.Position);
+            if (click.Pressed && dragged_card == null)
+                TryStartDrag(click.GlobalPosition);
             else if (dragged_card != null)
-                TryEndDrag(touch.Position);
+                TryEndDrag(click.GlobalPosition);
         }
     }
 
@@ -32,8 +35,7 @@ public partial class InputHandler : Node3D
 
         dragged_card = card;
         drag_start = card.GlobalPosition;
-        drag_offset = card.GlobalPosition - position;// + new Vector3(0, drag_height, 0);
-        //card.RenderPriority = 1;
+        drag_offset = card.GlobalPosition - position;
         card.SetCollisionLayer(3);
     }
 
@@ -72,21 +74,38 @@ public partial class InputHandler : Node3D
         var from = Camera.ProjectRayOrigin(screenPos);
         var to = from + Camera.ProjectRayNormal(screenPos) * 100;
 
+        GD.Print($"ray from {from} to {to}");
+
         var query = PhysicsRayQueryParameters3D.Create(from, to);
+        query.CollideWithAreas = true;
+        query.CollideWithBodies = false;
+        query.CollisionMask = 1;
+
+        var cards = new List<Card>();
+        var position = (Vector3?)null;
+
         var result = GetWorld3D().DirectSpaceState.IntersectRay(query);
-
-        if (result.Count == 0)
-            return null;
-
-        if (result["collider"].As<Area3D>()?.GetParent() is Card card)
+        while (result.Count != 0)
         {
-            GD.Print("card found");
-            return ((Vector3)result["position"], card);
+            position = (Vector3)result["position"];
+            var area = result["collider"].As<Area3D>();
+            if (area.GetParent() is Card c)
+                cards.Add(c);
+
+            var exclude = query.Exclude;
+            exclude.Add(area.GetRid());
+            query.Exclude = exclude;
+            result = GetWorld3D().DirectSpaceState.IntersectRay(query);
         }
-        else
+
+        if (!position.HasValue)
+            return null;
+        if (cards.Count == 0)
         {
             GD.Print("no card");
-            return ((Vector3)result["position"], null);
+            return (position.Value, null);
         }
+
+        return (position.Value, cards.MaxBy(c => c.Depth));
     }
 }
