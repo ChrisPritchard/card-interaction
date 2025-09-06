@@ -1,0 +1,82 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://bukn7flkhckf5"]
+
+[ext_resource type="Texture2D" uid="uid://vowec5qqqv2o" path="res://assets/larger-card-bordered.png" id="1_mda0p"]
+
+[sub_resource type="Shader" id="Shader_ktuci"]
+code = "shader_type spatial;
+render_mode blend_mix, unshaded, cull_disabled;
+
+// --- Depth Control ---
+uniform float depth_bias : hint_range(-0.1, 0.1, 0.001) = 0.0;
+
+// --- Main Texture ---
+uniform sampler2D albedo_texture : source_color;
+uniform vec4 modulate_color : source_color = vec4(1.0);
+
+// --- Border Effect ---
+uniform vec4 line_color : source_color = vec4(1.0);
+uniform float line_thickness : hint_range(0, 0.1) = 0.01; // Changed range to work with UV coordinates
+uniform float fade_amount : hint_range(0, 1) = 1.0;
+
+// --- Border Reveal Effect ---
+uniform float border_progress : hint_range(0, 1) = 1.0;
+
+// Sample pattern for the outline
+const vec2 OFFSETS[8] = vec2[8](
+	vec2(-1, -1), vec2(-1, 0), vec2(-1, 1),
+	vec2(0, -1),                vec2(0, 1),
+	vec2(1, -1),  vec2(1, 0),   vec2(1, 1)
+);
+
+void vertex() {
+	// Apply depth bias to prevent z-fighting
+	VERTEX.y += depth_bias;
+}
+
+void fragment() {
+	// 1. Sample the main texture
+	vec4 color = texture(albedo_texture, UV);
+	color *= modulate_color;
+
+	// 2. Apply the border outline effect
+	// Use a fixed size based on line_thickness (now in UV space, 0-1 range)
+	float outline_alpha = 0.0;
+	
+	for (int i = 0; i < OFFSETS.length(); i++) {
+		// Sample around the current UV position
+		vec4 sample_color = texture(albedo_texture, UV + OFFSETS[i] * line_thickness);
+		outline_alpha += sample_color.a;
+	}
+	outline_alpha = min(outline_alpha, 1.0);
+
+	vec4 outline_color = line_color;
+	outline_color.a *= fade_amount;
+
+	// Mix between the main color and the outline
+	vec4 final_color = mix(color, outline_color, outline_alpha - color.a);
+
+	// 3. Apply the progress-based border reveal effect
+	vec2 centered_uv = UV * 2.0 - 1.0; // Convert UV to range -1 to 1
+	float distance_from_center = max(abs(centered_uv.x), abs(centered_uv.y));
+	
+	// Use alpha scissoring for the reveal effect
+	if (distance_from_center > border_progress) {
+		discard; // This fragment is not rendered
+	}
+	
+	// 4. Set the final output for visible fragments
+	ALBEDO = final_color.rgb;
+	ALPHA = final_color.a;
+}"
+
+[resource]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_ktuci")
+shader_parameter/depth_bias = 0.036
+shader_parameter/albedo_texture = ExtResource("1_mda0p")
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/line_color = Color(0.835279, 8.71167e-05, 0.669523, 1)
+shader_parameter/line_thickness = 0.023
+shader_parameter/fade_amount = 0.0
+shader_parameter/border_progress = 1.0

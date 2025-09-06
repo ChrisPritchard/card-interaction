@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://ddy08fm4srvv"]
+
+[ext_resource type="Texture2D" uid="uid://vowec5qqqv2o" path="res://assets/larger-card-bordered.png" id="1_ch123"]
+[ext_resource type="Shader" uid="uid://bu2t8t5lvj7kd" path="res://resources/card_shader.gdshader" id="1_ua8e7"]
+
+[resource]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_ua8e7")
+shader_parameter/depth_bias = 3.25988e-09
+shader_parameter/albedo_texture = ExtResource("1_ch123")
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/line_color = Color(1, 1, 1, 1)
+shader_parameter/line_thickness = 0.024
+shader_parameter/fade_amount = 0.316
+shader_parameter/border_progress = 1.0
