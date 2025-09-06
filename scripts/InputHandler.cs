@@ -49,7 +49,7 @@ public partial class InputHandler : Node3D
         if (hover_card != null)
             hover_card?.HideBorder();
 
-        last_hover_card = card; // can't hover over this card again until another card or empty space is encoutered
+        last_hover_card = card; // can't hover over this card again until another card or empty space is encountered
         hover_card = card;
         card.ShowBorder();
     }

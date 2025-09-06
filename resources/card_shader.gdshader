@@ -7,13 +7,10 @@ uniform float aspect_ratio = 1.5;
 
 // --- Border Effect ---
 uniform vec4 line_color : source_color = vec4(1.0);
-uniform float line_thickness : hint_range(0, 0.1) = 0.01; // Changed range to work with UV coordinates
+uniform float line_thickness : hint_range(0, 0.1) = 0.01;
 uniform float fade_amount : hint_range(0, 1) = 1.0;
-
-// --- Border Reveal Effect ---
 uniform float border_progress : hint_range(0, 1) = 1.0;
 
-// Sample pattern for the outline
 const vec2 OFFSETS[8] = vec2[8](
 	vec2(-1, -1), vec2(-1, 0), vec2(-1, 1),
 	vec2(0, -1),                vec2(0, 1),
@@ -21,41 +18,34 @@ const vec2 OFFSETS[8] = vec2[8](
 );
 
 void fragment() {
-	// 1. Sample the main texture
 	vec4 color = texture(albedo_texture, UV);
 	color *= modulate_color;
 
-	// --- Aspect Ratio Correction ---
-	vec2 aspect_corrected_thickness = vec2(line_thickness, line_thickness / aspect_ratio);
-	// -----------------------------------------
-
-	// 2. Apply the border outline effect
-	// Use a fixed size based on line_thickness (now in UV space, 0-1 range)
+    // the uv offsets are 0.0 to 1.0 in each direction, regardless of texture dimensions. so cards for example are slightly compressed in the vertical axis
+    // this code corrects for that, by applying the x to y aspect ratio
+	vec2 aspect_corrected_thickness = vec2(line_thickness, line_thickness / aspect_ratio); 
 	float outline_alpha = 0.0;
-
 	for (int i = 0; i < OFFSETS.length(); i++) {
-		// Sample around the current UV position
-		vec4 sample_color = texture(albedo_texture, UV + OFFSETS[i] * aspect_corrected_thickness);
+		vec4 sample_color = texture(albedo_texture, UV + OFFSETS[i] * aspect_corrected_thickness); 
 		outline_alpha += sample_color.a;
 	}
-	outline_alpha = min(outline_alpha, 1.0);
+
+    // the sum of the sampled textures will be 0 when they're all transparent, 
+    // 1 when all opaque, and some mix when there is an edge present
+	outline_alpha = min(outline_alpha, 1.0); 
 
 	vec4 outline_color = line_color;
 	outline_color.a *= fade_amount;
 
-	// Mix between the main color and the outline
 	vec4 final_color = mix(color, outline_color, outline_alpha - color.a);
 
-	// 3. Apply the progress-based border reveal effect
-	vec2 centered_uv = UV * 2.0 - 1.0; // Convert UV to range -1 to 1
+	vec2 centered_uv = UV * 2.0 - 1.0;
 	float distance_from_center = max(abs(centered_uv.x), abs(centered_uv.y));
 
-	// Use alpha scissoring for the reveal effect
 	if (distance_from_center > border_progress) {
 		discard; // This fragment is not rendered
 	}
 
-	// 4. Set the final output for visible fragments
 	ALBEDO = final_color.rgb;
 	ALPHA = final_color.a;
 }

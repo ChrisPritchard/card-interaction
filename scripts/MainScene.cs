@@ -36,37 +36,34 @@ public partial class MainScene : Node3D
         var n = cards.Count;
         var parent = new int[n];
         for (int i = 0; i < n; i++)
-            parent[i] = i;
-
+            parent[i] = i; // every element is in its own group, initially (its parent is itself, so its the root elem)
 
         Rect2 Rect(Card c) => new(new(c.Position.X, c.Position.Z), card_size);
 
-        // Find with path compression
+        // Find with path compression (finds the root, and while doing so, ensures each element of the group also points to this root)
         int Find(int x) => parent[x] == x ? x : parent[x] = Find(parent[x]);
 
-        // Union sets when rectangles overlap
+        // if two elements (x, y) have different roots, one root is made the parent of the other (groups therefore joined)
         void Union(int x, int y)
         {
             int rootX = Find(x);
             int rootY = Find(y);
-            if (rootX != rootY) parent[rootY] = rootX;
+            if (rootX != rootY)
+                parent[rootY] = rootX;
         }
 
-        // Check all pairs for overlap
-        for (int i = 0; i < n; i++)
+        for (var i = 0; i < n; i++)
         {
             var rectI = Rect(cards[i]);
             for (int j = i + 1; j < n; j++)
             {
                 var rectJ = Rect(cards[j]);
                 if (rectI.Intersects(rectJ))
-                {
                     Union(i, j);
-                }
             }
         }
 
-        // Group objects by their root parent
+        // group objects by their root parent
         var groupsDict = new Dictionary<int, List<Card>>();
         for (var i = 0; i < n; i++)
         {
@@ -76,6 +73,7 @@ public partial class MainScene : Node3D
             groupsDict[root].Add(cards[i]);
         }
 
+        // and finally order the cards in each group by their prior order, compressing errant values back down to a reasonable range (render order only supports 255 values)
         foreach (var group in groupsDict.Values)
         {
             if (group.Count == 0)
