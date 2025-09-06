@@ -1,25 +1,21 @@
-[gd_scene load_steps=12 format=3 uid="uid://cp644q1sxu623"]
+[gd_scene load_steps=11 format=3 uid="uid://cp644q1sxu623"]
 
 [ext_resource type="Script" uid="uid://cr77o0ruskefb" path="res://scripts/MainScene.cs" id="1_w2twt"]
 [ext_resource type="Texture2D" uid="uid://jc3ir0oq5et4" path="res://assets/felt_green.jpg" id="2_pw63i"]
 [ext_resource type="Script" uid="uid://c4yty0niqkapm" path="res://scripts/InputHandler.cs" id="3_7ykc4"]
 [ext_resource type="PackedScene" uid="uid://becba32mwgemt" path="res://scenes/drop_spot.tscn" id="3_c16ls"]
 [ext_resource type="Script" uid="uid://vqanjwaknpx2" path="res://scripts/CameraController.cs" id="3_rt2n2"]
-[ext_resource type="Shader" uid="uid://bt8eqm6g4xy6u" path="res://resources/table_shader.gdshader" id="4_gubc5"]
 [ext_resource type="PackedScene" uid="uid://bc2womwx0o0n8" path="res://scenes/card.tscn" id="5_gubc5"]
 
 [sub_resource type="Environment" id="Environment_7ykc4"]
 background_mode = 1
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rt2n2"]
-render_priority = 0
-shader = ExtResource("4_gubc5")
-shader_parameter/albedo_texture = ExtResource("2_pw63i")
-shader_parameter/albedo_color = Color(1, 1, 1, 1)
-shader_parameter/depth_setting = 0.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rt2n2"]
+render_priority = -128
+albedo_texture = ExtResource("2_pw63i")
 
 [sub_resource type="QuadMesh" id="QuadMesh_c16ls"]
-material = SubResource("ShaderMaterial_rt2n2")
+material = SubResource("StandardMaterial3D_rt2n2")
 size = Vector2(20, 20)
 orientation = 1
 

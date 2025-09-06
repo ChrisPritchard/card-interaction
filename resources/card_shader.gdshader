@@ -1,8 +1,4 @@
 shader_type spatial;
-render_mode depth_draw_always;
-
-// --- Depth Control ---
-uniform float depth_setting : hint_range(0.0, 1.0, 0.001) = 0.0;
 
 // --- Main Texture ---
 uniform sampler2D albedo_texture : source_color;
@@ -16,9 +12,6 @@ uniform float fade_amount : hint_range(0, 1) = 1.0;
 
 // --- Border Reveal Effect ---
 uniform float border_progress : hint_range(0, 1) = 1.0;
-
-// --- Alpha Scissor Threshold ---
-uniform float alpha_cutoff : hint_range(0, 1) = 0.2; // NEW: Added cutoff parameter
 
 // Sample pattern for the outline
 const vec2 OFFSETS[8] = vec2[8](
@@ -62,14 +55,7 @@ void fragment() {
 		discard; // This fragment is not rendered
 	}
 
-    // 4. Alpha scissor test - discard fragments below cutoff
-	// Use the combined alpha from your final color calculation
-	if (final_color.a < alpha_cutoff) {
-		discard;
-	}
-
 	// 4. Set the final output for visible fragments
 	ALBEDO = final_color.rgb;
 	ALPHA = final_color.a;
-	DEPTH = depth_setting;
 }

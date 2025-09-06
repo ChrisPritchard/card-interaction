@@ -3,13 +3,11 @@
 [ext_resource type="Shader" uid="uid://bu2t8t5lvj7kd" path="res://resources/card_shader.gdshader" id="1_ktuci"]
 [ext_resource type="Script" uid="uid://pts2mfcn18rx" path="res://scripts/Card.cs" id="2_6u4wf"]
 [ext_resource type="Texture2D" uid="uid://7mn3850kjydr" path="res://assets/larger-card-bordered2.png" id="2_kg30u"]
-[ext_resource type="Shape3D" uid="uid://k1it56oflaxu" path="res://resources/card_shape.tres" id="3_ktuci"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kg30u"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_ktuci")
-shader_parameter/depth_setting = 0.0
 shader_parameter/albedo_texture = ExtResource("2_kg30u")
 shader_parameter/modulate_color = Color(1, 1, 1, 1)
 shader_parameter/aspect_ratio = 1.5
@@ -17,12 +15,14 @@ shader_parameter/line_color = Color(1, 1, 1, 1)
 shader_parameter/line_thickness = 0.04
 shader_parameter/fade_amount = 0.0
 shader_parameter/border_progress = 1.0
-shader_parameter/alpha_cutoff = 0.5
 
 [sub_resource type="QuadMesh" id="QuadMesh_8w5pg"]
 material = SubResource("ShaderMaterial_kg30u")
 size = Vector2(1, 1.5)
 orientation = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6u4wf"]
+size = Vector3(1, 0, 1.5)
 
 [node name="Card" type="MeshInstance3D" node_paths=PackedStringArray("CollisionArea")]
 mesh = SubResource("QuadMesh_8w5pg")
@@ -33,4 +33,4 @@ CollisionArea = NodePath("Area3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000921607, 0, -0.00025022)
-shape = ExtResource("3_ktuci")
+shape = SubResource("BoxShape3D_6u4wf")
