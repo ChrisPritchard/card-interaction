@@ -3,5 +3,6 @@
     "explorer.fileNesting.patterns": {
         "*.cs": "$(capture).cs.uid"
     },
-    "explorer.fileNesting.enabled": true
+    "explorer.fileNesting.enabled": true,
+    "godotTools.editorPath.godot4": "c:\\Users\\chris\\Projects\\Godot_v4.4.1-stable_mono_win64.exe"
 }

@@ -5,7 +5,7 @@ render_mode depth_draw_always;
 // Texture uniform - assign your texture here in the material
 uniform sampler2D albedo_texture : source_color;
 uniform vec4 albedo_color : source_color = vec4(1.0);
-uniform float depth_setting : hint_range(0.0, 1.0) = 0.0;
+uniform float depth_setting : hint_range(0.0, 1.0, 0.001) = 0.0;
 
 void fragment() {
     // Sample the texture normally
