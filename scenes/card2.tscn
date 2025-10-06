@@ -1,0 +1,63 @@
+[gd_scene load_steps=7 format=3 uid="uid://b12p7d773gddj"]
+
+[ext_resource type="Script" uid="uid://b5vsajgy1frbk" path="res://scripts/Card2.cs" id="1_bgjhw"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_io8eo"]
+load_path = "res://.godot/imported/larger-card-bordered2.png-22f38c98b386b83e7b5cf3f1d0282dde.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7klrl"]
+render_priority = 10
+transparency = 4
+depth_draw_mode = 1
+no_depth_test = true
+albedo_texture = SubResource("CompressedTexture2D_io8eo")
+
+[sub_resource type="QuadMesh" id="QuadMesh_y8tnw"]
+material = SubResource("StandardMaterial3D_7klrl")
+size = Vector2(1, 1.5)
+orientation = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vr0eu"]
+size = Vector3(0.9, 0.05, 1.35)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_bgjhw"]
+viewport_path = NodePath("SubViewport")
+
+[node name="card" type="MeshInstance3D"]
+sorting_offset = 32.555
+mesh = SubResource("QuadMesh_y8tnw")
+script = ExtResource("1_bgjhw")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_vr0eu")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39148173, 1.0243118)
+axis = 1
+texture = SubResource("ViewportTexture_bgjhw")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+size = Vector2i(150, 50)
+
+[node name="ZIndex" type="Label" parent="SubViewport"]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -45.5
+offset_top = -11.5
+offset_right = 45.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Hello World"
+horizontal_alignment = 1
+vertical_alignment = 1

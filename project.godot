@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="card-interaction"
-run/main_scene="uid://cp644q1sxu623"
+run/main_scene="uid://cgefy6mua3ptr"
 config/features=PackedStringArray("4.5", "C#", "GL Compatibility")
 config/icon="uid://ck8o82o752d1b"
 
@@ -24,6 +24,10 @@ window/size/initial_position_type=3
 [dotnet]
 
 project/assembly_name="card-interaction"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/sk_fly_camera/plugin.cfg")
 
 [input]
 

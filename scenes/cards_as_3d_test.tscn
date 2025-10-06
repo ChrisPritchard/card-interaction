@@ -1,0 +1,58 @@
+[gd_scene load_steps=12 format=3 uid="uid://cgefy6mua3ptr"]
+
+[ext_resource type="Script" uid="uid://cte4jalives85" path="res://addons/sk_fly_camera/src/fly_camera.gd" id="1_1dkcf"]
+[ext_resource type="Texture2D" uid="uid://beqlyv6qyf0gm" path="res://assets/Metal046A_2K-JPG_Color.jpg" id="1_io8eo"]
+[ext_resource type="Script" uid="uid://b5r01gxryueqr" path="res://scripts/CardsAs3dTest.cs" id="1_y8tnw"]
+[ext_resource type="Texture2D" uid="uid://ctbgwtljgsd3u" path="res://assets/Metal046A_2K-JPG_Metalness.jpg" id="2_7klrl"]
+[ext_resource type="Texture2D" uid="uid://b6c7o1sniawbl" path="res://assets/Metal046A_2K-JPG_NormalGL.jpg" id="3_y8tnw"]
+[ext_resource type="Texture2D" uid="uid://dgc1veamvdmnd" path="res://assets/Metal046A_2K-JPG_Roughness.jpg" id="4_vbj1u"]
+[ext_resource type="PackedScene" uid="uid://b12p7d773gddj" path="res://scenes/card2.tscn" id="7_vbj1u"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xyvf7"]
+albedo_texture = ExtResource("1_io8eo")
+metallic = 0.5
+metallic_texture = ExtResource("2_7klrl")
+roughness_texture = ExtResource("4_vbj1u")
+normal_enabled = true
+normal_texture = ExtResource("3_y8tnw")
+
+[sub_resource type="QuadMesh" id="QuadMesh_yimkb"]
+material = SubResource("StandardMaterial3D_xyvf7")
+size = Vector2(20, 20)
+orientation = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_y8tnw"]
+size = Vector3(20, 0.1, 20)
+
+[sub_resource type="Environment" id="Environment_0dgyi"]
+background_mode = 1
+
+[node name="cards_as_3d_test" type="Node3D"]
+script = ExtResource("1_y8tnw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00074386597, 0.005221367, -0.0047516823)
+mesh = SubResource("QuadMesh_yimkb")
+
+[node name="Area3D" type="Area3D" parent="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6418355, 0.093988895, -0.34466887)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("BoxShape3D_y8tnw")
+
+[node name="FlyCamera" type="CharacterBody3D" parent="."]
+transform = Transform3D(0.87758255, -0.22984886, 0.42073548, 0, 0.87758255, 0.47942555, -0.47942555, -0.4207355, 0.77015114, 3.1128848, 3.5471134, 5.698097)
+script = ExtResource("1_1dkcf")
+metadata/_custom_type_script = "uid://cte4jalives85"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_0dgyi")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.3969877, 0.9178239, 0, -0.9178239, 0.3969877, 0, 1.8156837, 0)
+
+[node name="card_holder" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="card" parent="card_holder" instance=ExtResource("7_vbj1u")]
