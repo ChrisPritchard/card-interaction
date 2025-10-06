@@ -1,21 +1,18 @@
 [gd_scene load_steps=7 format=3 uid="uid://b12p7d773gddj"]
 
+[ext_resource type="Texture2D" uid="uid://7mn3850kjydr" path="res://assets/larger-card-bordered2.png" id="1_8lbtd"]
 [ext_resource type="Script" uid="uid://b5vsajgy1frbk" path="res://scripts/Card2.cs" id="1_bgjhw"]
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_io8eo"]
-load_path = "res://.godot/imported/larger-card-bordered2.png-22f38c98b386b83e7b5cf3f1d0282dde.s3tc.ctex"
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7klrl"]
-render_priority = 10
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2p3p2"]
 transparency = 4
 depth_draw_mode = 1
 no_depth_test = true
-albedo_texture = SubResource("CompressedTexture2D_io8eo")
+albedo_texture = ExtResource("1_8lbtd")
+uv1_scale = Vector3(-3.005, -2.025, 1)
 
-[sub_resource type="QuadMesh" id="QuadMesh_y8tnw"]
-material = SubResource("StandardMaterial3D_7klrl")
-size = Vector2(1, 1.5)
-orientation = 1
+[sub_resource type="BoxMesh" id="BoxMesh_rq8tx"]
+material = SubResource("StandardMaterial3D_2p3p2")
+size = Vector3(1, 0.05, 1.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vr0eu"]
 size = Vector3(0.9, 0.05, 1.35)
@@ -25,7 +22,7 @@ viewport_path = NodePath("SubViewport")
 
 [node name="card" type="MeshInstance3D"]
 sorting_offset = 32.555
-mesh = SubResource("QuadMesh_y8tnw")
+mesh = SubResource("BoxMesh_rq8tx")
 script = ExtResource("1_bgjhw")
 
 [node name="Area3D" type="Area3D" parent="."]

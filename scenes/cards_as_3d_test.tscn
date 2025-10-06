@@ -42,7 +42,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 shape = SubResource("BoxShape3D_y8tnw")
 
 [node name="FlyCamera" type="CharacterBody3D" parent="."]
-transform = Transform3D(0.87758255, -0.22984886, 0.42073548, 0, 0.87758255, 0.47942555, -0.47942555, -0.4207355, 0.77015114, 3.1128848, 3.5471134, 5.698097)
+transform = Transform3D(0.9905146, -0.11518027, 0.07492933, 0, 0.5453063, 0.83823687, -0.13740778, -0.83028585, 0.54013383, 0.54952604, 4.8547363, 2.119481)
 script = ExtResource("1_1dkcf")
 metadata/_custom_type_script = "uid://cte4jalives85"
 
