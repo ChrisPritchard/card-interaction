@@ -95,6 +95,7 @@ public partial class CardsAs3dTest : Node3D
         drag_start = card.GlobalPosition;
         drag_offset = card.GlobalPosition - position;
         card.ZIndex = sbyte.MaxValue;
+        card.ReceiveShadows = false;
         card.SetCollisionLayer(2); // ensures that raycasts can no longer hit this card (so it can be cast *through* to where it might be dropped)
     }
 
@@ -119,6 +120,7 @@ public partial class CardsAs3dTest : Node3D
         if (dragged_card == null)
             return;
 
+        dragged_card.ReceiveShadows = true;
         dragged_card.SetCollisionLayer(1); // once no longer dragged, enable for raycasting again
         dragged_card = null;
         ResortCards(); // compress render order in groups of overlapping cards

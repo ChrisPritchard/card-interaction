@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cgefy6mua3ptr"]
+[gd_scene load_steps=15 format=3 uid="uid://cgefy6mua3ptr"]
 
 [ext_resource type="Script" uid="uid://cte4jalives85" path="res://addons/sk_fly_camera/src/fly_camera.gd" id="1_1dkcf"]
 [ext_resource type="Texture2D" uid="uid://beqlyv6qyf0gm" path="res://assets/Metal046A_2K-JPG_Color.jpg" id="1_io8eo"]
@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://ctbgwtljgsd3u" path="res://assets/Metal046A_2K-JPG_Metalness.jpg" id="2_7klrl"]
 [ext_resource type="Texture2D" uid="uid://b6c7o1sniawbl" path="res://assets/Metal046A_2K-JPG_NormalGL.jpg" id="3_y8tnw"]
 [ext_resource type="Texture2D" uid="uid://dgc1veamvdmnd" path="res://assets/Metal046A_2K-JPG_Roughness.jpg" id="4_vbj1u"]
-[ext_resource type="PackedScene" uid="uid://b12p7d773gddj" path="res://scenes/card2.tscn" id="7_vbj1u"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xyvf7"]
 albedo_texture = ExtResource("1_io8eo")
@@ -27,7 +26,18 @@ size = Vector3(20, 0.1, 20)
 [sub_resource type="Environment" id="Environment_0dgyi"]
 background_mode = 1
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y8tnw"]
+render_priority = 50
+no_depth_test = true
+
 [sub_resource type="SphereMesh" id="SphereMesh_y8tnw"]
+material = SubResource("StandardMaterial3D_y8tnw")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vbj1u"]
+render_priority = 50
+
+[sub_resource type="SphereMesh" id="SphereMesh_xyvf7"]
+material = SubResource("StandardMaterial3D_vbj1u")
 
 [node name="cards_as_3d_test" type="Node3D"]
 script = ExtResource("1_y8tnw")
@@ -58,9 +68,6 @@ shadow_enabled = true
 [node name="card_holder" type="Node3D" parent="."]
 unique_name_in_owner = true
 
-[node name="card" parent="card_holder" instance=ExtResource("7_vbj1u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.305923, 0)
-
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.260233, 1.0995612, 0)
 
@@ -75,6 +82,10 @@ light_color = Color(1, 0.03529412, 1, 1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0289917, 1.0995612, 4.67282)
 light_color = Color(2.695322e-06, 0.728999, 0.5744975, 1)
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+[node name="sphere" type="MeshInstance3D" parent="."]
 transform = Transform3D(1.325, 0, 0, 0, 1.325, 0, 0, 0, 1.325, -3.1867409, 2.4830408, 3.2370348)
 mesh = SubResource("SphereMesh_y8tnw")
+
+[node name="sphere2" type="MeshInstance3D" parent="sphere"]
+mesh = SubResource("SphereMesh_xyvf7")
+skeleton = NodePath("../..")

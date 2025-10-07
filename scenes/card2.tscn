@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://b12p7d773gddj"]
+[gd_scene load_steps=11 format=3 uid="uid://b12p7d773gddj"]
 
 [ext_resource type="Texture2D" uid="uid://7mn3850kjydr" path="res://assets/larger-card-bordered2.png" id="1_8lbtd"]
 [ext_resource type="Script" uid="uid://b5vsajgy1frbk" path="res://scripts/Card2.cs" id="1_bgjhw"]
@@ -21,8 +21,22 @@ orientation = 1
 [sub_resource type="BoxShape3D" id="BoxShape3D_vr0eu"]
 size = Vector3(0.9, 0.05, 1.35)
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_8lbtd"]
+height = 0.1
+radius = 0.2
+
 [sub_resource type="ViewportTexture" id="ViewportTexture_bgjhw"]
 viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8lbtd"]
+render_priority = 1
+no_depth_test = true
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_2p3p2"]
+material = SubResource("StandardMaterial3D_8lbtd")
+top_radius = 0.2
+bottom_radius = 0.2
+height = 0.1
 
 [node name="card" type="MeshInstance3D"]
 sorting_offset = 32.555
@@ -36,6 +50,12 @@ mesh = SubResource("QuadMesh_8lbtd")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 shape = SubResource("BoxShape3D_vr0eu")
+
+[node name="CounterArea3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CounterArea3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.38726968, 0, 0.65432024)
+shape = SubResource("CylinderShape3D_8lbtd")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.39148173, 1.0243118)
@@ -65,3 +85,7 @@ theme_override_font_sizes/font_size = 20
 text = "Hello World"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Counter" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.399, 0, 0.668)
+mesh = SubResource("CylinderMesh_2p3p2")
