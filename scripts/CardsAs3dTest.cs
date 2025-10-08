@@ -94,7 +94,7 @@ public partial class CardsAs3dTest : Node3D
         dragged_card = card;
         drag_start = card.GlobalPosition;
         drag_offset = card.GlobalPosition - position;
-        card.ZIndex = sbyte.MaxValue;
+        card.ZIndex = 0.0f;
         card.ReceiveShadows = false;
         card.SetCollisionLayer(2); // ensures that raycasts can no longer hit this card (so it can be cast *through* to where it might be dropped)
     }
@@ -210,10 +210,13 @@ public partial class CardsAs3dTest : Node3D
         foreach (var group in groupsDict.Values)
         {
             if (group.Count == 0)
-                group[0].ZIndex = 0;
+                group[0].ZIndex = 1;
             else
-                group.OrderBy(c => c.ZIndex).Select((card, index) => (card, index)).ToList().ForEach(o =>
-                    o.card.ZIndex = (sbyte)(10 + (sbyte)o.index));
+            {
+                var diff = 1.0f / group.Count;
+                group.OrderByDescending(c => c.ZIndex).Select((card, index) => (card, index)).ToList().ForEach(o =>
+                    o.card.ZIndex = 1 - o.index * diff);
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b12p7d773gddj"]
+[gd_scene load_steps=10 format=3 uid="uid://b12p7d773gddj"]
 
 [ext_resource type="Texture2D" uid="uid://7mn3850kjydr" path="res://assets/larger-card-bordered2.png" id="1_8lbtd"]
 [ext_resource type="Script" uid="uid://b5vsajgy1frbk" path="res://scripts/Card2.cs" id="1_bgjhw"]
@@ -6,17 +6,14 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2p3p2"]
 transparency = 4
 depth_draw_mode = 1
-no_depth_test = true
 albedo_texture = ExtResource("1_8lbtd")
 uv1_scale = Vector3(-3.005, -2.025, 1)
+use_z_clip_scale = true
+fov_override = 81.7
 
 [sub_resource type="BoxMesh" id="BoxMesh_rq8tx"]
 material = SubResource("StandardMaterial3D_2p3p2")
 size = Vector3(1, 0.05, 1.5)
-
-[sub_resource type="QuadMesh" id="QuadMesh_8lbtd"]
-size = Vector2(0.85, 1.25)
-orientation = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vr0eu"]
 size = Vector3(0.9, 0.05, 1.35)
@@ -30,7 +27,6 @@ viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8lbtd"]
 render_priority = 1
-no_depth_test = true
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_2p3p2"]
 material = SubResource("StandardMaterial3D_8lbtd")
@@ -42,9 +38,6 @@ height = 0.1
 sorting_offset = 32.555
 mesh = SubResource("BoxMesh_rq8tx")
 script = ExtResource("1_bgjhw")
-
-[node name="ShadowCaster" type="MeshInstance3D" parent="."]
-mesh = SubResource("QuadMesh_8lbtd")
 
 [node name="Area3D" type="Area3D" parent="."]
 

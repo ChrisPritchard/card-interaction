@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cgefy6mua3ptr"]
+[gd_scene load_steps=13 format=3 uid="uid://cgefy6mua3ptr"]
 
 [ext_resource type="Script" uid="uid://cte4jalives85" path="res://addons/sk_fly_camera/src/fly_camera.gd" id="1_1dkcf"]
 [ext_resource type="Texture2D" uid="uid://beqlyv6qyf0gm" path="res://assets/Metal046A_2K-JPG_Color.jpg" id="1_io8eo"]
@@ -28,16 +28,9 @@ background_mode = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y8tnw"]
 render_priority = 50
-no_depth_test = true
 
 [sub_resource type="SphereMesh" id="SphereMesh_y8tnw"]
 material = SubResource("StandardMaterial3D_y8tnw")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vbj1u"]
-render_priority = 50
-
-[sub_resource type="SphereMesh" id="SphereMesh_xyvf7"]
-material = SubResource("StandardMaterial3D_vbj1u")
 
 [node name="cards_as_3d_test" type="Node3D"]
 script = ExtResource("1_y8tnw")
@@ -52,11 +45,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6418355, 0.093988895, -0.34
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 shape = SubResource("BoxShape3D_y8tnw")
-
-[node name="FlyCamera" type="CharacterBody3D" parent="."]
-transform = Transform3D(0.9905146, -0.11518027, 0.07492933, 0, 0.5453063, 0.83823687, -0.13740778, -0.83028585, 0.54013383, 0.54952604, 4.8547363, 2.119481)
-script = ExtResource("1_1dkcf")
-metadata/_custom_type_script = "uid://cte4jalives85"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_0dgyi")
@@ -86,6 +74,7 @@ light_color = Color(2.695322e-06, 0.728999, 0.5744975, 1)
 transform = Transform3D(1.325, 0, 0, 0, 1.325, 0, 0, 0, 1.325, -3.1867409, 2.4830408, 3.2370348)
 mesh = SubResource("SphereMesh_y8tnw")
 
-[node name="sphere2" type="MeshInstance3D" parent="sphere"]
-mesh = SubResource("SphereMesh_xyvf7")
-skeleton = NodePath("../..")
+[node name="FlyCamera" type="CharacterBody3D" parent="."]
+transform = Transform3D(0.9905146, -0.11518027, 0.07492933, 0, 0.5453063, 0.83823687, -0.13740778, -0.83028585, 0.54013383, 0.54952604, 4.8547363, 2.119481)
+script = ExtResource("1_1dkcf")
+metadata/_custom_type_script = "uid://cte4jalives85"

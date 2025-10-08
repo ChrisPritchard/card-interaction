@@ -6,7 +6,7 @@ public partial class Card2 : MeshInstance3D
     private Area3D area, counter;
     private Label label;
 
-    public int ZIndex { get => material?.RenderPriority ?? 0; set => SetRenderPriority(value); }
+    public float ZIndex { get => material?.ZClipScale ?? 0; set => SetZIndex(value); }
 
     public bool ReceiveShadows { get => !material?.DisableReceiveShadows ?? false; set => material.DisableReceiveShadows = counter_material.DisableReceiveShadows = !value; }
 
@@ -28,16 +28,16 @@ public partial class Card2 : MeshInstance3D
         label = GetNode<Label>("%ZIndex");
     }
 
-    private void SetRenderPriority(int value)
+    private void SetZIndex(float value)
     {
         if (material == null)
         {
-            CallDeferred(nameof(SetRenderPriority), value);
+            CallDeferred(nameof(SetZIndex), value);
             return;
         }
 
-        material.RenderPriority = value;
-        counter_material.RenderPriority = value;
+        material.ZClipScale = value;
+        counter_material.ZClipScale = value;
 
         label.Text = value.ToString();
     }
